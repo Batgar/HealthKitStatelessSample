@@ -1,5 +1,4 @@
-ENV["MATCH_PASSWORD"] = 'Xamarin4ILM'
-ENV["FASTLANE_PASSWORD"] = 'Xamarin4ILM'
+
 
 
 
