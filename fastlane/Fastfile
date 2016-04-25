@@ -1,0 +1,73 @@
+ENV["MATCH_PASSWORD"] = 'Xamarin4ILM'
+ENV["FASTLANE_PASSWORD"] = 'Xamarin4ILM'
+
+
+
+def build_app_adhoc
+
+	
+	match(
+		git_url: "git@github.com:ILMServices/CodeSigning.git",
+  		app_identifier: "com.ilmservice.healthkitsample", 
+  		username: 'appdev@ilmservice.com',
+  		type:"adhoc",
+  		verbose:true)
+  
+   sh 'nuget restore "../HealthKitSample.sln"'
+  	
+  #Go to the Xamarin Studio command line and build the SLN
+  sh 'xbuild /p:Configuration=Ad-Hoc /p:Platform=iPhone "../HealthKitSample.sln"'
+  
+  #we have an adhoc build, it will be published to HockeyApp via Jenkins custom build steps against the output IPA from xbuild above.
+  #sample path of IPA to publish after build: ./ilm.eventmobileapp/ilm.eventmobileapp.iOS/bin/iPhone/Ad-Hoc/MDC 2015.ipa
+  
+end
+
+def build_app_appstore
+
+	match(
+		git_url: "git@github.com:ILMServices/CodeSigning.git",
+  		app_identifier: "com.ilmservice.healthkitsample", 
+  		username: 'appdev@ilmservice.com',
+  		type:"appstore",
+  		verbose:true)
+  		
+  sh 'nuget restore "../HealthKitSample.sln"'
+  	
+  #Go to the Xamarin Studio command line and build the SLN
+  sh 'xbuild /p:Configuration=AppStore /p:Platform=iPhone "../HealthKitSample.sln"'
+  
+  #TODO: We should have a real build send it up to TestFlight via pilot
+  
+  
+end
+
+#lane :dev do
+#	build_app_dev
+#end
+
+platform :ios do
+	lane :adhoc do
+		setup_jenkins(force:true)
+		build_app_adhoc
+	end
+
+	lane :appstore do
+		setup_jenkins(force:true)
+		build_app_appstore
+	end
+	
+	#Use this to register devices and make sure that the prov profiles are updated for the AdHoc config.
+	lane :ILMRegisterDevices do
+		register_devices(devices:{"Dan Edgar's iPhone" => "4588df79372df439e7a28f3225f1675aee62d082"})
+		
+		match(
+			git_url: "git@github.com:ILMServices/CodeSigning.git",
+			app_identifier: "com.ilmservice.mdc", 
+			username: 'appdev@ilmservice.com',
+			type:"adhoc",
+			force:true,
+			verbose:true)
+		
+	end
+end
