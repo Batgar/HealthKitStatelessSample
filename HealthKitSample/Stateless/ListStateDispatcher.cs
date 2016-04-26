@@ -7,7 +7,7 @@ namespace Stateless
 	public class ListStateDispatcher<T, S> where T : IIdentifiable
 		where S : IListStore<T>, new()
 	{
-		public void Bind(IListSubscriber<T> subscriber)
+		public void Bind(IListView<T> subscriber)
 		{
 			if (!_subscribers.Contains (subscriber)) {
 				_subscribers.Add (subscriber);
@@ -19,7 +19,7 @@ namespace Stateless
 			}
 		}
 
-		public void Unbind(IListSubscriber<T> subscriber)
+		public void Unbind(IListView<T> subscriber)
 		{
 			_subscribers.Remove (subscriber);
 		}
@@ -56,7 +56,7 @@ namespace Stateless
 
 
 
-		List<IListSubscriber<T>> _subscribers = new List<IListSubscriber<T>>();
+		List<IListView<T>> _subscribers = new List<IListView<T>>();
 
 		public List<T> Store
 		{

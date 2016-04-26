@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace HealthKitSample
 {
-	class HealthState : IStore {
+	class HealthState : IState {
 
 		public HealthState()
 		{
 			//Rev up the HealthKitDataManager.
-			HealthKitDataManager.Refresh();
+			HealthKitDataStore.Refresh();
 
 			//TODO: Subscribe to HealthKit state changes.
 

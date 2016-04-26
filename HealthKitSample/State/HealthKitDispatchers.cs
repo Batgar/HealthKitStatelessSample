@@ -5,13 +5,13 @@ namespace HealthKitSample
 {
 	internal static class HealthKitDispatchers
 	{
-		static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListStore> _bloodGlucoseListStateDispatcher;
+		static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListState> _bloodGlucoseListStateDispatcher;
 
-		internal static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListStore> BloodGlucoseListStateDispatcher
+		internal static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListState> BloodGlucoseListStateDispatcher
 		{
 			get{
 				if (_bloodGlucoseListStateDispatcher == null) {
-					_bloodGlucoseListStateDispatcher = new ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListStore> ();
+					_bloodGlucoseListStateDispatcher = new ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListState> ();
 				}
 				return _bloodGlucoseListStateDispatcher;
 			}

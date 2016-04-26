@@ -3,7 +3,7 @@ using Stateless;
 
 namespace HealthKitSample
 {
-	public class BloodGlucoseRecommendationState : IStore
+	public class BloodGlucoseRecommendationState : IState
 	{
 		public BloodGlucoseRecommendationState ()
 		{

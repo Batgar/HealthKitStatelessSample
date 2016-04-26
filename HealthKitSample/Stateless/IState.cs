@@ -2,7 +2,7 @@
 
 namespace Stateless
 {
-	public interface IStore
+	public interface IState
 	{
 	}
 }

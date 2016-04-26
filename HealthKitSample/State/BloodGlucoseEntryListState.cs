@@ -8,17 +8,17 @@ using Stateless;
 
 namespace HealthKitSample
 {
-	class BloodGlucoseEntryListStore : IListStore<BloodGlucoseEntry>
+	class BloodGlucoseEntryListState : IListStore<BloodGlucoseEntry>
 	{
 		#region IListStore implementation
 		public void Delete (BloodGlucoseEntry entry)
 		{
-			HealthKitDataManager.RemoveBloodGlucoseEntry (entry);
+			HealthKitDataStore.RemoveBloodGlucoseEntry (entry);
 		}
 
 		public void Add(BloodGlucoseEntry entry)
 		{
-			HealthKitDataManager.AddBloodGlucoseEntry (entry);
+			HealthKitDataStore.AddBloodGlucoseEntry (entry);
 		}
 
 		public void ResetList (List<BloodGlucoseEntry> newList)

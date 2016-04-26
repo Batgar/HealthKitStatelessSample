@@ -5,7 +5,7 @@ using Foundation;
 
 namespace HealthKitSample
 {
-	partial class BloodGlucoseTableViewController : IListSubscriber<BloodGlucoseEntry>
+	partial class BloodGlucoseTableViewController : IListView<BloodGlucoseEntry>
 	{
 		private void Bind()
 		{

@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 namespace Stateless
 {
-	public static class StateDispatcher<T> where T : IStore, new()
+	public static class StateDispatcher<T> where T : IState, new()
 	{
-		public static void Bind(ISubscriber<T> subscriber)
+		public static void Bind(IView<T> subscriber)
 		{
 			if (!_subscribers.Contains (subscriber)) {
 				_subscribers.Add (subscriber);
 			}
 
-			GenerateStore ();
+			GenerateState ();
 
 			Refresh ();
 		}
 
-		public static void Unbind(ISubscriber<T> subscriber)
+		public static void Unbind(IView<T> subscriber)
 		{
 			_subscribers.Remove (subscriber);
 		}
@@ -25,11 +25,11 @@ namespace Stateless
 		{
 			foreach (var s in _subscribers)
 			{
-				s.Receive(Store);
+				s.Receive(State);
 			}
 		}
 
-		private static void GenerateStore()
+		private static void GenerateState()
 		{
 			if (_internalStore == null) {
 				_internalStore = new T ();
@@ -38,11 +38,11 @@ namespace Stateless
 
 		private static T _internalStore;
 
-		static List<ISubscriber<T>> _subscribers = new List<ISubscriber<T>>();
+		static List<IView<T>> _subscribers = new List<IView<T>>();
 
-		static public T Store { 
+		static public T State { 
 			get { 
-				GenerateStore (); 
+				GenerateState (); 
 				return _internalStore; 
 			} 
 		}

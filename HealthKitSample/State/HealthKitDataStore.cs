@@ -8,9 +8,9 @@ using Stateless;
 
 namespace HealthKitSample
 {
-	public static class HealthKitDataManager
+	public static class HealthKitDataStore
 	{
-		static HealthKitDataManager()
+		static HealthKitDataStore()
 		{
 			HealthStore = new HKHealthStore ();
 		}
@@ -93,7 +93,7 @@ namespace HealthKitSample
 							var heightUnit = HKUnit.Inch;
 
 							DispatchQueue.MainQueue.DispatchAsync(() => {
-								var dataStore = StateDispatcher<HealthState>.Store;
+								var dataStore = StateDispatcher<HealthState>.State;
 									
 								dataStore.Height = quantity.GetDoubleValue(heightUnit);
 
@@ -107,10 +107,10 @@ namespace HealthKitSample
 								//Refresh the views with the last known blood glucose quantity via HealthState and BloodGlucoseRecommendationState.
 								var lastBloodGlucoseQuantity = (results.LastOrDefault() as HKQuantitySample).Quantity;
 
-								var dataStore = StateDispatcher<HealthState>.Store;
+								var healthState = StateDispatcher<HealthState>.State;
 
 								var mgPerDL = HKUnit.FromString("mg/dL");
-								dataStore.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
+								healthState.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
 
 
 								//At this point all UI subscribers to the HealthState object will update.
@@ -118,8 +118,8 @@ namespace HealthKitSample
 
 							
 
-								var recommendationStore = StateDispatcher<BloodGlucoseRecommendationState>.Store;
-								recommendationStore.BloodGlucose = dataStore.BloodGlucose;
+								var recommendationStore = StateDispatcher<BloodGlucoseRecommendationState>.State;
+								recommendationStore.BloodGlucose = healthState.BloodGlucose;
 
 								//At this point all UI subscribers to the BloodGlucoseRecommendationState will update.
 								StateDispatcher<BloodGlucoseRecommendationState>.Refresh();
@@ -202,7 +202,7 @@ namespace HealthKitSample
 				if (error == null)
 				{
 					DispatchQueue.MainQueue.DispatchAsync (() => {
-						var dataStore = StateDispatcher<HealthState>.Store;
+						var dataStore = StateDispatcher<HealthState>.State;
 
 						dataStore.BiologicalSex = GetDisplayableBiologicalSex(biologicalSex.BiologicalSex);
 

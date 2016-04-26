@@ -100,10 +100,6 @@
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="AlertManager.cs" />
-    <Compile Include="Stateless\ISubscriber.cs" />
-    <Compile Include="Stateless\IStore.cs" />
-    <Compile Include="ViewController.BloodGlucoseRecommendation.Subscriber.cs" />
-    <Compile Include="ViewController.Health.Subscriber.cs" />
     <Compile Include="ViewController.Binding.cs" />
     <Compile Include="BloodGlucoseTableViewController.cs" />
     <Compile Include="BloodGlucoseTableViewController.designer.cs">
@@ -111,19 +107,23 @@
     </Compile>
     <Compile Include="State\BloodGlucoseRecommendationState.cs" />
     <Compile Include="State\HealthState.cs" />
-    <Compile Include="State\HealthKitDataManager.cs" />
-    <Compile Include="State\BloodGlucoseEntry.cs" />
     <Compile Include="State\DateTimeExtensions.cs" />
     <Compile Include="Stateless\StateDispatcher.cs" />
     <Compile Include="Stateless\Change.cs" />
     <Compile Include="Stateless\ListStateDispatcher.cs" />
-    <Compile Include="Stateless\IListSubscriber.cs" />
     <Compile Include="Stateless\IIdentifiable.cs" />
-    <Compile Include="BloodGlucoseTableViewController.Subscriber.cs" />
     <Compile Include="Stateless\IListStore.cs" />
-    <Compile Include="State\BloodGlucoseEntryListStore.cs" />
     <Compile Include="Stateless\ChangesetComputer.cs" />
     <Compile Include="State\HealthKitDispatchers.cs" />
+    <Compile Include="State\HealthKitDataStore.cs" />
+    <Compile Include="State\BloodGlucoseEntryListState.cs" />
+    <Compile Include="State\BloodGlucoseEntryState.cs" />
+    <Compile Include="Stateless\IState.cs" />
+    <Compile Include="Stateless\IView.cs" />
+    <Compile Include="BloodGlucoseTableViewController.View.cs" />
+    <Compile Include="ViewController.BloodGlucoseRecommendation.View.cs" />
+    <Compile Include="ViewController.Health.View.cs" />
+    <Compile Include="Stateless\IListView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

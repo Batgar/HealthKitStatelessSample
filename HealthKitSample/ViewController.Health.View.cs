@@ -3,7 +3,7 @@ using Stateless;
 
 namespace HealthKitSample
 {
-	partial class ViewController : ISubscriber<HealthState>
+	partial class ViewController : IView<HealthState>
 	{
 		public void Receive(HealthState state)
 		{

@@ -4,7 +4,7 @@ using Stateless;
 
 namespace HealthKitSample
 {
-	partial class ViewController : ISubscriber<BloodGlucoseRecommendationState>
+	partial class ViewController : IView<BloodGlucoseRecommendationState>
 	{
 		public void Receive(BloodGlucoseRecommendationState state)
 		{

@@ -2,7 +2,7 @@
 
 namespace Stateless
 {
-	public interface ISubscriber<T>
+	public interface IView<T> where T : IState
 	{
 		void Receive(T state);
 	}

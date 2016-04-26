@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Stateless
 {
-	public interface IListSubscriber<T>
+	public interface IListView<T>
 	{
 		void Receive(IList<T> list, IList<Change> changeset);
 	}
