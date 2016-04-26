@@ -28,17 +28,17 @@ Highlights
 
 In the overall Stateless design there are the following main actors:
 
--- Store -- Where the state to show within the app is sourced from.
--- State -- Contains chunks of state from 1 or more Stores
--- View -- Where the State is to be received and only displayed.
--- Dispatcher -- Handles action processing from the view (and other locations) and notifies the store to manage the state. In this solution it also distributes State objects to the views.
+*Store -- Where the state to show within the app is sourced from.
+*State -- Contains chunks of state from 1 or more Stores
+*View -- Where the State is to be received and only displayed.
+*Dispatcher -- Handles action processing from the view (and other locations) and notifies the store to manage the state. In this solution it also distributes State objects to the views.
 
 In this code, we have 1 static store: HealthKitDataStore
 
 From this Store we source 3 different states:
--- BloodGlucoseRecommendationState
--- HealthState
--- BloodGlucoseEntryListState which contains 1 or more BloodGlucoseEntryState entries.
+*`BloodGlucoseRecommendationState`
+*`HealthState`
+*`BloodGlucoseEntryListState` which contains 1 or more `BloodGlucoseEntryState` entries.
 
 We use a fully bootstrapped and static StateDispatcher<T> where T is guaranteed to be an IState type as a safeguard.
 
@@ -56,7 +56,7 @@ Take a look at ViewController.Health.View:
 
 The first thing to notice is that we use partial classes to declutter the standard ViewController stuff and separate out the code that renders our HealthState object into the ViewController.
 
-`partial class ViewController : IView<HealthState>
+```partial class ViewController : IView<HealthState>
 {
 	public void Receive(HealthState state)
 	{
@@ -64,12 +64,12 @@ The first thing to notice is that we use partial classes to declutter the standa
 		this.bloodGlucose.Text = state.BloodGlucose.ToString ();
 		this.biologicalSex.Text = state.BiologicalSex;
 	}
-}`
+}```
 
 So we have clean code that maps HealthState members into our UILabels backed by our view controller, but how is this code actually hit?
 
 To see how it all connects up, take a look at ViewController.Binding.cs:
-`using System;
+```using System;
 using Stateless;
 
 namespace HealthKitSample
@@ -88,7 +88,7 @@ namespace HealthKitSample
 			StateDispatcher<BloodGlucoseRecommendationState>.Unbind (this);
 		}
 	}
-}`	
+}```	
 
 Notice that we bind to a completely static StateDispatcher<T> for 2 different state types: HealthState and BloodGlucoseRecommendationState.
 
