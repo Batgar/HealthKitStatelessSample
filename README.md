@@ -94,22 +94,22 @@ namespace HealthKitSample
 }
 ```	
 
-Notice that we bind to a completely static StateDispatcher<T> for 2 different state types: HealthState and BloodGlucoseRecommendationState.
+Notice that we bind to a completely static `StateDispatcher<T>` for 2 different state types: `HealthState` and `BloodGlucoseRecommendationState`.
 
-The beauty of these being completely static is that since we have a completely static top-level data source as well: HealthKitDataStore.
+The beauty of `StateDispatcher<T>` being completely static is that we have a completely static top-level data source in the form of `HealthKitDataStore`.
 
 There is really no need to have any instance variables anywhere in the application. We simply use static types across the whole system to indicate what we want.
 
-The StateDispatcher<T> also tracks the single app wide instance of the state object type T.
+The `StateDispatcher<T>` also tracks the single app wide instance of the state object type T.
 
-The Bind method on each StateDispatcher<T> assumes that the ViewController has implemented IView<T>, and the IView<T> is just stored in a list to be used later for broadcasts of state updates.
+The `Bind` method on each `StateDispatcher<T>` assumes that the `ViewController` has implemented `IView<T>`, and the `IView<T>` is just stored in a list to be used later for broadcasts of state updates.
 
-The Bind method also does an initial blanket IView<T>.Refresh(T) call on Bind to ensure that initial state is populated into the view.
+The `Bind` method also does an initial blanket `IView<T>.Refresh(T state)` call on Bind to ensure that initial state is populated into the view.
 
-The Unbind method on each State object simply removes the IView<T> instance from a stored list.
+The Unbind method on each State object simply removes the `IView<T>` instance from a stored list.
 
 
-Let's dig deeper and see how state updates occur.
+Let's dig deeper and see how state updates occur, in this case from the `HealthKitDataStore`.
 
 ```C#
 //Pull out the HealthState object.
@@ -124,9 +124,7 @@ healthState.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
 StateDispatcher<HealthState>.Refresh();
 ```
 
-... and that is really it. 
-
-Lists and UITableViews are a little more complicated.
+Lists and UITableViews are a little more complicated. More on that later.
 
 
 
