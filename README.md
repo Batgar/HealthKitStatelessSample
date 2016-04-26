@@ -33,6 +33,8 @@ In the overall Stateless design there are the following main actors:
 * View -- Where the State is to be received and only displayed.
 * Dispatcher -- Handles action processing from the view (and other locations) and notifies the store to manage the state. In this solution it also distributes State objects to the views.
 
+I don't like the compromises made from the original 'stateless' design. The key compromise is the overloading of the Dispatcher as a State container, hence the name `StateDispatcher`. But it seemed like a really easy compromise to make given the lifetime and bootstrapping done throughout the solution.
+
 In this code, we have 1 static store: HealthKitDataStore
 
 From this Store we source 3 different states:
@@ -40,17 +42,17 @@ From this Store we source 3 different states:
 * `HealthState`
 * `BloodGlucoseEntryListState` which contains 1 or more `BloodGlucoseEntryState` entries.
 
-We use a fully bootstrapped and static StateDispatcher<T> where T is guaranteed to be an IState type as a safeguard.
+We use a fully bootstrapped and static `StateDispatcher<T>` where T is guaranteed to be an `IState` type as a safeguard.
 
-We also use a non-static ListStateDispatcher<T,S> where T is guaranteed to be an IState type, and S is a specialized IListStore<T> interface that can handle the dispatcher to store communication of list changes.
+We also use a non-static `ListStateDispatcher<T,S>` where T is guaranteed to be an `IState` type, and S is a specialized `IListStore<T>` interface that can handle the communication between the dispatcher and a list store to handle list changes.
 
 Let's start with code in the View Controllers, then drill on down to the other stuff.
 
-The hard stuff is the handling of List<T> through a UITableViewController implementation.
+The hard stuff is the handling of List<T> through a UITableViewController implementation. We don't cover that in this README, yet.
 
-The easy stuff is the one to one mapping of properties to standard appearance of data in a UILabel.
+The easy stuff is the one to one mapping of properties to standard appearance of data in a UILabel via an IView / UIViewController.
 
-Let's start with the UILabel mappings in a view of the HealthState and BloodGlucoseRecommendationState data.
+Let's start with the UILabel mappings in a view of the `HealthState` and `BloodGlucoseRecommendationState` data.
 
 Take a look at ViewController.Health.View:
 
@@ -98,7 +100,7 @@ Notice that we bind to a completely static `StateDispatcher<T>` for 2 different 
 
 The beauty of `StateDispatcher<T>` being completely static is that we have a completely static top-level data source in the form of `HealthKitDataStore`.
 
-There is really no need to have any instance variables anywhere in the application. We simply use static types across the whole system to indicate what we want.
+There is really no need to have any instance variables anywhere in the application. We simply use static types across the whole system to indicate what specific states we want.
 
 The `StateDispatcher<T>` also tracks the single app wide instance of the state object type T.
 
@@ -106,7 +108,7 @@ The `Bind` method on each `StateDispatcher<T>` assumes that the `ViewController`
 
 The `Bind` method also does an initial blanket `IView<T>.Refresh(T state)` call on Bind to ensure that initial state is populated into the view.
 
-The Unbind method on each State object simply removes the `IView<T>` instance from a stored list.
+The `Unbind` method on each State object simply removes the `IView<T>` instance from a stored list.
 
 
 Let's dig deeper and see how state updates occur, in this case from the `HealthKitDataStore`.
@@ -123,6 +125,8 @@ healthState.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
 /At this point all IView<T> based subscribers bound to the dispatcher will update.
 StateDispatcher<HealthState>.Refresh();
 ```
+
+
 
 Lists and UITableViews are a little more complicated. More on that later.
 
