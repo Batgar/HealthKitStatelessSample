@@ -20,6 +20,22 @@ namespace HealthKitSample
 		{
 			HealthKitDataManager.AddBloodGlucoseEntry (entry);
 		}
+
+		public void ResetList (List<BloodGlucoseEntry> newList)
+		{
+			_mainList = newList;
+		}
+
+		private List<BloodGlucoseEntry> _mainList;
+
+		public List<BloodGlucoseEntry> MainList {
+			get {
+				if (_mainList == null) {
+					_mainList = new List<BloodGlucoseEntry> ();
+				}
+				return _mainList;
+			}
+		}
 		#endregion
 		
 	}

@@ -122,6 +122,8 @@
     <Compile Include="BloodGlucoseTableViewController.Subscriber.cs" />
     <Compile Include="Stateless\IListStore.cs" />
     <Compile Include="State\BloodGlucoseEntryListStore.cs" />
+    <Compile Include="Stateless\ChangesetComputer.cs" />
+    <Compile Include="State\HealthKitDispatchers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

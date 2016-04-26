@@ -4,34 +4,40 @@ using System.Linq;
 
 namespace Stateless
 {
-	public static class ListStateDispatcher<T> where T : IIdentifiable
+	public class ListStateDispatcher<T, S> where T : IIdentifiable
+		where S : IListStore<T>, new()
 	{
-		
-
-		public static void Bind(IListSubscriber<T> subscriber)
+		public void Bind(IListSubscriber<T> subscriber)
 		{
 			if (!_subscribers.Contains (subscriber)) {
 				_subscribers.Add (subscriber);
 			}
 
-			GenerateStore ();
-
 			//If we just bound, then fire off a refresh to this subscriber that all elements were just inserted.
-			if (_internalStore.Count > 0) {
+			if (MainListStore.MainList.Count > 0) {
 				subscriber.Receive (Store, Store.Select ((o, i) => new Change (){ Index = i, ChangeSetType = Change.ChangeType.Insert }).ToList ());
 			}
 		}
 
-		public static void Unbind(IListSubscriber<T> subscriber)
+		public void Unbind(IListSubscriber<T> subscriber)
 		{
 			_subscribers.Remove (subscriber);
 		}
 
-		public static IListStore<T> MainListStore { get; set; } 
+		private IListStore<T> _mainListStore;
 
-		public static void Refresh(List<T> newEntries, List<Change> changeset)
+		public IListStore<T> MainListStore { 
+			get {
+				if (_mainListStore == null) {
+					_mainListStore = new S ();
+				}
+				return _mainListStore;
+			}
+		}
+
+		private void Refresh(List<T> newEntries, List<Change> changeset)
 		{
-			_internalStore = newEntries;
+			MainListStore.ResetList(newEntries);
 
 			foreach (var s in _subscribers)
 			{
@@ -39,32 +45,31 @@ namespace Stateless
 			}
 		}
 
-		private static void GenerateStore()
+		public void Refresh(List<T> newEntries)
 		{
-			if (_internalStore == null) {
-				_internalStore = new List<T> ();
-			}
+			//Now we have our new values, just need to compute the changeset to pass through the Dispatcher.
+			var changeset = ChangesetComputer.ComputeListDifferences(Store.Cast<IIdentifiable>().ToList(),
+				newEntries.Cast<IIdentifiable>().ToList());
+
+			Refresh (newEntries, changeset);
 		}
 
-		private static List<T> _internalStore;
 
-		static List<IListSubscriber<T>> _subscribers = new List<IListSubscriber<T>>();
 
-		public static List<T> Store
+		List<IListSubscriber<T>> _subscribers = new List<IListSubscriber<T>>();
+
+		public List<T> Store
 		{
 			get{
-				if (_internalStore == null) {
-					_internalStore = new List<T> ();
-				}
-				return _internalStore;
+				return MainListStore.MainList;
 			}
 		}
 
-		public static void RemoveAtIndex(int index) {
+		public void RemoveAtIndex(int index) {
 			MainListStore.Delete (Store [index]);
 		}
 
-		public static void Add(T itemToAdd) {
+		public void Add(T itemToAdd) {
 			MainListStore.Add (itemToAdd);
 		}
 	}

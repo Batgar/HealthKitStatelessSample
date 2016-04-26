@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Stateless
 {
@@ -6,6 +7,8 @@ namespace Stateless
 	{
 		void Delete(T item);
 		void Add(T item);
+		List<T> MainList {get;}
+		void ResetList(List<T> newList);
 	}
 }
 

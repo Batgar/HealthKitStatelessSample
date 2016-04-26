@@ -104,6 +104,7 @@ namespace HealthKitSample
 							
 
 							DispatchQueue.MainQueue.DispatchAsync(() => {
+								//Refresh the views with the last known blood glucose quantity via HealthState and BloodGlucoseRecommendationState.
 								var lastBloodGlucoseQuantity = (results.LastOrDefault() as HKQuantitySample).Quantity;
 
 								var dataStore = StateDispatcher<HealthState>.Store;
@@ -111,14 +112,22 @@ namespace HealthKitSample
 								var mgPerDL = HKUnit.FromString("mg/dL");
 								dataStore.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
 
-								StateDispatcher<HealthState>.Refresh();					
+
+								//At this point all UI subscribers to the HealthState object will update.
+								StateDispatcher<HealthState>.Refresh();			
+
+							
 
 								var recommendationStore = StateDispatcher<BloodGlucoseRecommendationState>.Store;
 								recommendationStore.BloodGlucose = dataStore.BloodGlucose;
 
+								//At this point all UI subscribers to the BloodGlucoseRecommendationState will update.
 								StateDispatcher<BloodGlucoseRecommendationState>.Refresh();
 
-								List<BloodGlucoseEntry> newBloodGlucoseEntries = new List<BloodGlucoseEntry>();
+
+
+								//Now we need to deliver all the blood glucose entries in a list to any listeners.
+								var newBloodGlucoseEntries = new List<BloodGlucoseEntry>();
 
 								//Now also deliver all blood glucose readings up to the UI via the 'diff engine' for easy UITableViewController based updating.
 								foreach (var bloodGlucoseEntry in results)
@@ -131,16 +140,7 @@ namespace HealthKitSample
 									}
 								}
 
-								var oldBloodGlucoseEntries = ListStateDispatcher<BloodGlucoseEntry>.Store;
-
-								//Now we have our new values, just need to compute the changeset to pass through the Dispatcher.
-								var changeset = ChangesetComputer.ComputeListDifferences(oldBloodGlucoseEntries,
-									newBloodGlucoseEntries);
-
-								ListStateDispatcher<BloodGlucoseEntry>.MainListStore = new BloodGlucoseEntryListStore();
-
-								//Broadcast out the changeset.
-								ListStateDispatcher<BloodGlucoseEntry>.Refresh(newBloodGlucoseEntries, changeset);
+								HealthKitDispatchers.BloodGlucoseListStateDispatcher.Refresh(newBloodGlucoseEntries);
 
 							});
 						}
@@ -150,21 +150,27 @@ namespace HealthKitSample
 			HealthStore.ExecuteQuery (query);
 		}
 
-
+		//This method handles all the HealthKit gymnastics to remove a blood glucose entry.
 		public static void RemoveBloodGlucoseEntry(BloodGlucoseEntry entry)
 		{			
 			HealthStore.DeleteObject (entry.BloodGlucoseSample, new Action<bool, NSError> ((success, error) => {
 				if (!success || error != null)
 				{
+					//NOTE: If this app didn't put the entry into the blood glucose list, then there will be an error on delete.
 					AlertManager.ShowError("Health Kit", "Unable to delete glucose sample: " + error);
 				}
 				else
 				{
+					//Woo! We properly removed the last entry, make sure that any listeners to the glucose states are properly updated.
 					RefreshQuantityValue(HKQuantityTypeIdentifierKey.BloodGlucose, HKObjectType.GetQuantityType (HKQuantityTypeIdentifierKey.BloodGlucose));
 				}
 			}));
 		}
 
+		/// <summary>
+		/// This method handles all the HealthKit gymnastics to add a blood glucose entry to the HealthKit data.
+		/// </summary>
+		/// <param name="entry">Entry.</param>
 		public static void AddBloodGlucoseEntry(BloodGlucoseEntry entry)
 		{
 			var date = new NSDate ();
@@ -176,10 +182,12 @@ namespace HealthKitSample
 			HealthStore.SaveObject(sample, new Action<bool, NSError>((success, error) => {
 				if (!success || error != null)
 				{
+					//There may have been an add error for some reason.
 					AlertManager.ShowError("Health Kit", "Unable to add glucose sample: " + error);
 				}
 				else
 				{
+					//Refresh all app wide blood glucose UI fields.
 					RefreshQuantityValue(HKQuantityTypeIdentifierKey.BloodGlucose, quantityType);
 				}
 			}));

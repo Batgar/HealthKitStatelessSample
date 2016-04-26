@@ -9,12 +9,12 @@ namespace HealthKitSample
 	{
 		private void Bind()
 		{
-			ListStateDispatcher<BloodGlucoseEntry>.Bind (this);
+			HealthKitDispatchers.BloodGlucoseListStateDispatcher.Bind (this);
 		}
 
 		private void Unbind()
 		{
-			ListStateDispatcher<BloodGlucoseEntry>.Unbind (this);
+			HealthKitDispatchers.BloodGlucoseListStateDispatcher.Unbind (this);
 		}
 
 		public void Receive(IList<BloodGlucoseEntry> entries, IList<Change> changeset) {
@@ -37,7 +37,7 @@ namespace HealthKitSample
 
 		public override nint NumberOfSections (UIKit.UITableView tableView)
 		{
-			if (ListStateDispatcher<BloodGlucoseEntry>.Store.Count > 0) {
+			if (HealthKitDispatchers.BloodGlucoseListStateDispatcher.Store.Count > 0) {
 				return 1;
 			}
 			return 0;
@@ -45,14 +45,14 @@ namespace HealthKitSample
 
 		public override nint RowsInSection (UIKit.UITableView tableView, nint section)
 		{
-			return ListStateDispatcher<BloodGlucoseEntry>.Store.Count;
+			return HealthKitDispatchers.BloodGlucoseListStateDispatcher.Store.Count;
 		}
 
 		public override UIKit.UITableViewCell GetCell (UIKit.UITableView tableView, Foundation.NSIndexPath indexPath)
 		{
 			var tableCell = this.TableView.DequeueReusableCell("BloodGlucoseTableCellIdentifier");
 
-			var dataForRow = ListStateDispatcher<BloodGlucoseEntry>.Store [indexPath.Row];
+			var dataForRow = HealthKitDispatchers.BloodGlucoseListStateDispatcher.Store [indexPath.Row];
 
 			tableCell.TextLabel.Text = dataForRow.BloodGlucoseValue.ToString();
 
@@ -62,13 +62,13 @@ namespace HealthKitSample
 		public override void CommitEditingStyle (UIKit.UITableView tableView, UIKit.UITableViewCellEditingStyle editingStyle, Foundation.NSIndexPath indexPath)
 		{
 			if (editingStyle == UIKit.UITableViewCellEditingStyle.Delete) {
-				ListStateDispatcher<BloodGlucoseEntry>.RemoveAtIndex (indexPath.Row);
+				HealthKitDispatchers.BloodGlucoseListStateDispatcher.RemoveAtIndex (indexPath.Row);
 			}
 		}
 
 		private void AddBloodGlucoseEntry(double bloodGlucoseValue)
 		{
-			ListStateDispatcher<BloodGlucoseEntry>.Add(new BloodGlucoseEntry(){BloodGlucoseValue = bloodGlucoseValue});
+			HealthKitDispatchers.BloodGlucoseListStateDispatcher.Add(new BloodGlucoseEntry(){BloodGlucoseValue = bloodGlucoseValue});
 		}
 
 	}
