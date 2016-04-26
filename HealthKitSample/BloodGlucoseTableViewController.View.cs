@@ -5,72 +5,29 @@ using Foundation;
 
 namespace HealthKitSample
 {
-	partial class BloodGlucoseTableViewController : IListView<BloodGlucoseEntry>
+	partial class BloodGlucoseTableViewController : GeneralListViewTableViewController<BloodGlucoseEntry, BloodGlucoseEntryListState>
 	{
-		private void Bind()
+		#region implemented abstract members of GeneralListViewTableViewController
+		protected override Stateless.ListStateDispatcher<HealthKitSample.BloodGlucoseEntry, HealthKitSample.BloodGlucoseEntryListState> GetDispatcher ()
 		{
-			HealthKitDispatchers.BloodGlucoseListStateDispatcher.Bind (this);
+			return HealthKitDispatchers.BloodGlucoseListStateDispatcher;
 		}
-
-		private void Unbind()
+		protected override void UpdateTableViewCell (UIKit.UITableViewCell cell, HealthKitSample.BloodGlucoseEntry state)
 		{
-			HealthKitDispatchers.BloodGlucoseListStateDispatcher.Unbind (this);
+			cell.TextLabel.Text = state.BloodGlucoseValue.ToString();
 		}
-
-		public void Receive(IList<BloodGlucoseEntry> entries, IList<Change> changeset) {
-			
-			foreach (var change in changeset) {
-				switch (change.ChangeSetType) {
-				case Change.ChangeType.Delete:
-					{
-						this.TableView.DeleteRows (new NSIndexPath[] { NSIndexPath.FromRowSection (change.Index, 0) }, UIKit.UITableViewRowAnimation.Right);
-						break;
-					}
-				case Change.ChangeType.Insert:
-					{
-						this.TableView.InsertRows (new NSIndexPath[] { NSIndexPath.FromRowSection (change.Index, 0) }, UIKit.UITableViewRowAnimation.Left);
-						break;
-					}
-				}
+		protected override string TableCellIdentifier {
+			get {
+				return "BloodGlucoseTableCellIdentifier";
 			}
 		}
+		#endregion
 
-		public override nint NumberOfSections (UIKit.UITableView tableView)
-		{
-			if (HealthKitDispatchers.BloodGlucoseListStateDispatcher.Store.Count > 0) {
-				return 1;
-			}
-			return 0;
-		}
-
-		public override nint RowsInSection (UIKit.UITableView tableView, nint section)
-		{
-			return HealthKitDispatchers.BloodGlucoseListStateDispatcher.Store.Count;
-		}
-
-		public override UIKit.UITableViewCell GetCell (UIKit.UITableView tableView, Foundation.NSIndexPath indexPath)
-		{
-			var tableCell = this.TableView.DequeueReusableCell("BloodGlucoseTableCellIdentifier");
-
-			var dataForRow = HealthKitDispatchers.BloodGlucoseListStateDispatcher.Store [indexPath.Row];
-
-			tableCell.TextLabel.Text = dataForRow.BloodGlucoseValue.ToString();
-
-			return tableCell;
-		}
-
-		public override void CommitEditingStyle (UIKit.UITableView tableView, UIKit.UITableViewCellEditingStyle editingStyle, Foundation.NSIndexPath indexPath)
-		{
-			if (editingStyle == UIKit.UITableViewCellEditingStyle.Delete) {
-				HealthKitDispatchers.BloodGlucoseListStateDispatcher.RemoveAtIndex (indexPath.Row);
-			}
-		}
-
+		//This is where the "+" toolbar button will bind to.
 		private void AddBloodGlucoseEntry(double bloodGlucoseValue)
 		{
-			HealthKitDispatchers.BloodGlucoseListStateDispatcher.Add(new BloodGlucoseEntry(){BloodGlucoseValue = bloodGlucoseValue});
+			this.AddRow(new BloodGlucoseEntry(){BloodGlucoseValue = bloodGlucoseValue});
 		}
-
 	}
 }
 

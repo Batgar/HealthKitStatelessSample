@@ -4,7 +4,7 @@ using UIKit;
 
 namespace HealthKitSample
 {
-	public partial class BloodGlucoseTableViewController : UITableViewController
+	public partial class BloodGlucoseTableViewController
 	{
 		public BloodGlucoseTableViewController (IntPtr handle) : base (handle)
 		{
@@ -22,6 +22,8 @@ namespace HealthKitSample
 				this.EditButtonItem};
 
 			// Perform any additional setup after loading the view, typically from a nib.
+
+			//This ensures we are bound to a dispatcher so we can retrieve our data.
 			Bind();
 
 		}
@@ -38,8 +40,6 @@ namespace HealthKitSample
 			base.DidReceiveMemoryWarning ();
 			// Release any cached data, images, etc that aren't in use.
 		}
-
-
 	}
 }
 

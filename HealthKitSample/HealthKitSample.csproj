@@ -124,6 +124,7 @@
     <Compile Include="ViewController.BloodGlucoseRecommendation.View.cs" />
     <Compile Include="ViewController.Health.View.cs" />
     <Compile Include="Stateless\IListView.cs" />
+    <Compile Include="GeneralListViewTableViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
