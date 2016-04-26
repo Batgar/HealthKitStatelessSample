@@ -122,13 +122,17 @@ var mgPerDL = HKUnit.FromString("mg/dL");
 healthState.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
 
 
-/At this point all IView<T> based subscribers bound to the dispatcher will update.
+//At this point all IView<T> based subscribers bound to the dispatcher will update.
 StateDispatcher<HealthState>.Refresh();
 ```
 
 
 
 Lists and UITableViews are a little more complicated. More on that later.
+
+I also want this scheme to work across Mono.Android projects, so we will rev an example there and see how it works.
+
+Google Fit data will have to be used instead of HealthKit, so it is going to be interesting to swap out the bottom end and the top end and see how it all could possibly gel.
 
 
 
