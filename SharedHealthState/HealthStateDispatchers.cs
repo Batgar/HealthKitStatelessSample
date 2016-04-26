@@ -1,13 +1,13 @@
 ﻿using System;
 using Stateless;
 
-namespace HealthKitSample
+namespace SharedHealthState
 {
-	internal static class HealthKitDispatchers
+	public static class HealthStateDispatchers
 	{
 		static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListState> _bloodGlucoseListStateDispatcher;
 
-		internal static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListState> BloodGlucoseListStateDispatcher
+		public static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListState> BloodGlucoseListStateDispatcher
 		{
 			get{
 				if (_bloodGlucoseListStateDispatcher == null) {

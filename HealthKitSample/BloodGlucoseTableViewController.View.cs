@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using Stateless;
 using Foundation;
+using SharedHealthState;
 
 namespace HealthKitSample
 {
 	partial class BloodGlucoseTableViewController : GeneralListViewTableViewController<BloodGlucoseEntry, BloodGlucoseEntryListState>
 	{
 		#region implemented abstract members of GeneralListViewTableViewController
-		protected override Stateless.ListStateDispatcher<HealthKitSample.BloodGlucoseEntry, HealthKitSample.BloodGlucoseEntryListState> GetDispatcher ()
+		protected override Stateless.ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListState> GetDispatcher ()
 		{
-			return HealthKitDispatchers.BloodGlucoseListStateDispatcher;
+			return HealthStateDispatchers.BloodGlucoseListStateDispatcher;
 		}
-		protected override void UpdateTableViewCell (UIKit.UITableViewCell cell, HealthKitSample.BloodGlucoseEntry state)
+		protected override void UpdateTableViewCell (UIKit.UITableViewCell cell, BloodGlucoseEntry state)
 		{
 			cell.TextLabel.Text = state.BloodGlucoseValue.ToString();
 		}

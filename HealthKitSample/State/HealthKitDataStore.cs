@@ -5,25 +5,26 @@ using System.Linq;
 using System.Collections.Generic;
 using CoreFoundation;
 using Stateless;
+using SharedHealthState;
 
 namespace HealthKitSample
 {
-	public static class HealthKitDataStore
+	internal class HealthKitDataStore : IHealthDataStore
 	{
-		static HealthKitDataStore()
+		public HealthKitDataStore()
 		{
 			HealthStore = new HKHealthStore ();
 		}
 
-		static HKHealthStore HealthStore {get; set;}
+		HKHealthStore HealthStore {get; set;}
 
-		public static bool IsHealthDataAvailable {
+		public bool IsHealthDataAvailable {
 			get {
 				return HKHealthStore.IsHealthDataAvailable; 
 			}
 		}
 
-		public static void GetUserAuthorizationIfNeeded()
+		public void GetUserAuthorizationIfNeeded()
 		{
 			if (IsHealthDataAvailable) {
 				HealthStore.RequestAuthorizationToShare (HealthTypesToWrite(),
@@ -73,7 +74,7 @@ namespace HealthKitSample
 			return new NSSet (allHealthTypesToRead.ToArray());
 		}
 
-		static void RefreshQuantityValue(NSString quantityTypeKey, HKQuantityType quantityType)
+		void RefreshQuantityValue(NSString quantityTypeKey, HKQuantityType quantityType)
 		{			
 
 			NSSortDescriptor timeSortDescriptor = new NSSortDescriptor(HKSample.SortIdentifierEndDate, false);
@@ -127,7 +128,7 @@ namespace HealthKitSample
 
 
 								//Now we need to deliver all the blood glucose entries in a list to any listeners.
-								var newBloodGlucoseEntries = new List<BloodGlucoseEntry>();
+								var newBloodGlucoseEntries = new List<HealthKitBloodGlucoseEntry>();
 
 								//Now also deliver all blood glucose readings up to the UI via the 'diff engine' for easy UITableViewController based updating.
 								foreach (var bloodGlucoseEntry in results)
@@ -135,12 +136,13 @@ namespace HealthKitSample
 									var bloodGlucoseSample = bloodGlucoseEntry as HKQuantitySample;
 									if (bloodGlucoseSample != null)
 									{
-										newBloodGlucoseEntries.Add(new BloodGlucoseEntry(bloodGlucoseSample) );
+										newBloodGlucoseEntries.Add(new HealthKitBloodGlucoseEntry(bloodGlucoseSample) );
 
 									}
 								}
 
-								HealthKitDispatchers.BloodGlucoseListStateDispatcher.Refresh(newBloodGlucoseEntries);
+								HealthStateDispatchers.BloodGlucoseListStateDispatcher.Refresh(
+									newBloodGlucoseEntries.Cast<BloodGlucoseEntry>().ToList());
 
 							});
 						}
@@ -151,9 +153,11 @@ namespace HealthKitSample
 		}
 
 		//This method handles all the HealthKit gymnastics to remove a blood glucose entry.
-		public static void RemoveBloodGlucoseEntry(BloodGlucoseEntry entry)
+		public void RemoveBloodGlucoseEntry(BloodGlucoseEntry entry)
 		{			
-			HealthStore.DeleteObject (entry.BloodGlucoseSample, new Action<bool, NSError> ((success, error) => {
+			//Cast the entry as a HealthKitBloodGlucoseEntry...
+			HealthKitBloodGlucoseEntry hkBloodGlucoseEntry = entry as HealthKitBloodGlucoseEntry;
+			HealthStore.DeleteObject (hkBloodGlucoseEntry.BloodGlucoseSample, new Action<bool, NSError> ((success, error) => {
 				if (!success || error != null)
 				{
 					//NOTE: If this app didn't put the entry into the blood glucose list, then there will be an error on delete.
@@ -171,7 +175,7 @@ namespace HealthKitSample
 		/// This method handles all the HealthKit gymnastics to add a blood glucose entry to the HealthKit data.
 		/// </summary>
 		/// <param name="entry">Entry.</param>
-		public static void AddBloodGlucoseEntry(BloodGlucoseEntry entry)
+		public void AddBloodGlucoseEntry(BloodGlucoseEntry entry)
 		{
 			var date = new NSDate ();
 			var quantityType = HKObjectType.GetQuantityType (HKQuantityTypeIdentifierKey.BloodGlucose);
@@ -194,7 +198,7 @@ namespace HealthKitSample
 				
 		}
 
-		private static void RefreshCharacteristicValue(NSString characteristicTypeKey, HKCharacteristicType characteristicType)
+		private void RefreshCharacteristicValue(NSString characteristicTypeKey, HKCharacteristicType characteristicType)
 		{
 			if (characteristicTypeKey == HKCharacteristicTypeIdentifierKey.BiologicalSex) {
 				NSError error = null;
@@ -227,7 +231,7 @@ namespace HealthKitSample
 		}
 
 
-		public static void Refresh()
+		public void Refresh()
 		{
 			var quantityTypesToRead = QuantityTypesToRead.Select (q=> new {Key = q, QuantityType = HKObjectType.GetQuantityType (q)});
 				

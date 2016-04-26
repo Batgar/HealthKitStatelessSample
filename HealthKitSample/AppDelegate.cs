@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using UIKit;
+using SharedHealthState;
 
 namespace HealthKitSample
 {
@@ -17,9 +18,13 @@ namespace HealthKitSample
 
 		public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
 		{
+			var healthKitDataStore = new HealthKitDataStore ();
+
+			TinyIoC.TinyIoCContainer.Current.Register<IHealthDataStore> (healthKitDataStore);
+
 			// Override point for customization after application launch.
 			// If not required for your application you can safely delete this method
-			HealthKitDataStore.GetUserAuthorizationIfNeeded();
+			healthKitDataStore.GetUserAuthorizationIfNeeded();
 
 			return true;
 		}

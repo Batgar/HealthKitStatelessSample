@@ -1,24 +1,24 @@
 using System;
-using HealthKit;
-using Foundation;
 using System.Linq;
 using System.Collections.Generic;
-using CoreFoundation;
 using Stateless;
 
-namespace HealthKitSample
+namespace SharedHealthState
 {
-	class BloodGlucoseEntryListState : IListStore<BloodGlucoseEntry>
+	public class BloodGlucoseEntryListState : IListStore<BloodGlucoseEntry>
 	{
 		#region IListStore implementation
 		public void Delete (BloodGlucoseEntry entry)
 		{
-			HealthKitDataStore.RemoveBloodGlucoseEntry (entry);
+			var healthDataStore = TinyIoC.TinyIoCContainer.Current.Resolve<IHealthDataStore> ();
+
+			healthDataStore.RemoveBloodGlucoseEntry (entry);
 		}
 
 		public void Add(BloodGlucoseEntry entry)
 		{
-			HealthKitDataStore.AddBloodGlucoseEntry (entry);
+			var healthDataStore = TinyIoC.TinyIoCContainer.Current.Resolve<IHealthDataStore> ();
+			healthDataStore.AddBloodGlucoseEntry (entry);
 		}
 
 		public void ResetList (List<BloodGlucoseEntry> newList)

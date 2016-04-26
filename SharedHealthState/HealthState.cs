@@ -2,14 +2,15 @@
 using Stateless;
 using System.Collections.Generic;
 
-namespace HealthKitSample
+namespace SharedHealthState
 {
-	class HealthState : IState {
+	public class HealthState : IState {
 
 		public HealthState()
 		{
+			var healthDataStore = TinyIoC.TinyIoCContainer.Current.Resolve<IHealthDataStore> ();
 			//Rev up the HealthKitDataManager.
-			HealthKitDataStore.Refresh();
+			healthDataStore.Refresh();
 
 			//TODO: Subscribe to HealthKit state changes.
 

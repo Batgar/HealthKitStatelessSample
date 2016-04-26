@@ -105,30 +105,30 @@
     <Compile Include="BloodGlucoseTableViewController.designer.cs">
       <DependentUpon>BloodGlucoseTableViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="State\BloodGlucoseRecommendationState.cs" />
-    <Compile Include="State\HealthState.cs" />
-    <Compile Include="State\DateTimeExtensions.cs" />
-    <Compile Include="Stateless\StateDispatcher.cs" />
-    <Compile Include="Stateless\Change.cs" />
-    <Compile Include="Stateless\ListStateDispatcher.cs" />
-    <Compile Include="Stateless\IIdentifiable.cs" />
-    <Compile Include="Stateless\IListStore.cs" />
-    <Compile Include="Stateless\ChangesetComputer.cs" />
-    <Compile Include="State\HealthKitDispatchers.cs" />
-    <Compile Include="State\HealthKitDataStore.cs" />
-    <Compile Include="State\BloodGlucoseEntryListState.cs" />
-    <Compile Include="State\BloodGlucoseEntryState.cs" />
-    <Compile Include="Stateless\IState.cs" />
-    <Compile Include="Stateless\IView.cs" />
     <Compile Include="BloodGlucoseTableViewController.View.cs" />
     <Compile Include="ViewController.BloodGlucoseRecommendation.View.cs" />
     <Compile Include="ViewController.Health.View.cs" />
-    <Compile Include="Stateless\IListView.cs" />
     <Compile Include="GeneralListViewTableViewController.cs" />
+    <Compile Include="State\HealthKitDataStore.cs" />
+    <Compile Include="State\HealthKitBloodGlucoseEntry.cs" />
+    <Compile Include="State\DateTimeExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Stateless\" />
     <Folder Include="State\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stateless\Stateless.csproj">
+      <Project>{A6241498-3B10-4E57-8C19-E27A51B2713C}</Project>
+      <Name>Stateless</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharedHealthState\SharedHealthState.csproj">
+      <Project>{B4EF28CC-7A4B-4FF4-AD81-E115BA1772FF}</Project>
+      <Name>SharedHealthState</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TinyIoC\TinyIoC.csproj">
+      <Project>{059BDB65-C63B-47D0-84F6-9784EEDE0760}</Project>
+      <Name>TinyIoC</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

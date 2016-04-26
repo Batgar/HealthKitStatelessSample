@@ -1,6 +1,6 @@
 ﻿using System;
 using Stateless;
-
+using SharedHealthState;
 
 namespace HealthKitSample
 {

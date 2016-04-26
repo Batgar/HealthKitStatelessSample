@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<component format="1" id="googleplayservices-fitness" is-shell="true">
+  <name>Google Play Services - Fitness</name>
+  <publisher>Xamarin Inc.</publisher>
+  <publisher-url>http://xamarin.com</publisher-url>
+  <version>29.0.0.1</version>
+  <summary>APIs to make building fitness apps and devices easier.</summary>
+  <packages>
+    <package id="Xamarin.GooglePlayServices.Fitness" version="29.0.0.1" framework="android" />
+  </packages>
+  <samples>
+    <sample id="BasicSensorsApi">
+      <name>Basic Sensors API</name>
+      <summary>Basic Sensors API</summary>
+    </sample>
+  </samples>
+</component>

@@ -1,7 +1,7 @@
 ﻿using System;
 using Stateless;
 
-namespace HealthKitSample
+namespace SharedHealthState
 {
 	public class BloodGlucoseRecommendationState : IState
 	{
