@@ -28,17 +28,17 @@ Highlights
 
 In the overall Stateless design there are the following main actors:
 
-*Store -- Where the state to show within the app is sourced from.
-*State -- Contains chunks of state from 1 or more Stores
-*View -- Where the State is to be received and only displayed.
-*Dispatcher -- Handles action processing from the view (and other locations) and notifies the store to manage the state. In this solution it also distributes State objects to the views.
+* Store -- Where the state to show within the app is sourced from.
+* State -- Contains chunks of state from 1 or more Stores
+* View -- Where the State is to be received and only displayed.
+* Dispatcher -- Handles action processing from the view (and other locations) and notifies the store to manage the state. In this solution it also distributes State objects to the views.
 
 In this code, we have 1 static store: HealthKitDataStore
 
 From this Store we source 3 different states:
-*`BloodGlucoseRecommendationState`
-*`HealthState`
-*`BloodGlucoseEntryListState` which contains 1 or more `BloodGlucoseEntryState` entries.
+* `BloodGlucoseRecommendationState`
+* `HealthState`
+* `BloodGlucoseEntryListState` which contains 1 or more `BloodGlucoseEntryState` entries.
 
 We use a fully bootstrapped and static StateDispatcher<T> where T is guaranteed to be an IState type as a safeguard.
 
