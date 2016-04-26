@@ -56,7 +56,8 @@ Take a look at ViewController.Health.View:
 
 The first thing to notice is that we use partial classes to declutter the standard ViewController stuff and separate out the code that renders our HealthState object into the ViewController.
 
-```partial class ViewController : IView<HealthState>
+```C#
+partial class ViewController : IView<HealthState>
 {
 	public void Receive(HealthState state)
 	{
@@ -64,12 +65,14 @@ The first thing to notice is that we use partial classes to declutter the standa
 		this.bloodGlucose.Text = state.BloodGlucose.ToString ();
 		this.biologicalSex.Text = state.BiologicalSex;
 	}
-}```
+}
+```
 
 So we have clean code that maps HealthState members into our UILabels backed by our view controller, but how is this code actually hit?
 
 To see how it all connects up, take a look at ViewController.Binding.cs:
-```using System;
+```C#
+using System;
 using Stateless;
 
 namespace HealthKitSample
@@ -88,7 +91,8 @@ namespace HealthKitSample
 			StateDispatcher<BloodGlucoseRecommendationState>.Unbind (this);
 		}
 	}
-}```	
+}
+```	
 
 Notice that we bind to a completely static StateDispatcher<T> for 2 different state types: HealthState and BloodGlucoseRecommendationState.
 
@@ -107,7 +111,7 @@ The Unbind method on each State object simply removes the IView<T> instance from
 
 Let's dig deeper and see how state updates occur.
 
-`
+```C#
 //Pull out the HealthState object.
 var healthState = StateDispatcher<HealthState>.State;
 
@@ -117,7 +121,8 @@ healthState.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
 
 
 /At this point all IView<T> based subscribers bound to the dispatcher will update.
-StateDispatcher<HealthState>.Refresh();`
+StateDispatcher<HealthState>.Refresh();
+```
 
 ... and that is really it. 
 
