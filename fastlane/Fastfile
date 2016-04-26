@@ -1,5 +1,4 @@
-ENV["MATCH_PASSWORD"] = 'Xamarin4ILM'
-ENV["FASTLANE_PASSWORD"] = 'Xamarin4ILM'
+
 
 
 
@@ -59,7 +58,7 @@ platform :ios do
 	
 	#Use this to register devices and make sure that the prov profiles are updated for the AdHoc config.
 	lane :ILMRegisterDevices do
-		register_devices(devices:{"Dan Edgar's iPhone" => "4588df79372df439e7a28f3225f1675aee62d082"})
+		register_devices(devices:{"Dan Edgar's iPhone" => "DUDE!"})
 		
 		match(
 			git_url: "git@github.com:ILMServices/CodeSigning.git",
