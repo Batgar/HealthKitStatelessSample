@@ -43,6 +43,7 @@ namespace HealthKitSample
 			HKQuantityTypeIdentifierKey.BloodGlucose,
 			HKQuantityTypeIdentifierKey.Height,
 			HKQuantityTypeIdentifierKey.BodyMass,
+			HKQuantityTypeIdentifierKey.StepCount,
 		};
 
 		static NSString[] CharacteristicTypesToRead = new NSString[] {
@@ -100,6 +101,26 @@ namespace HealthKitSample
 								dataStore.Height = quantity.GetDoubleValue(heightUnit);
 
 								StateDispatcher<HealthState>.Refresh();								
+							});
+						} else if (quantityTypeKey == HKQuantityTypeIdentifierKey.StepCount) {
+							
+							DispatchQueue.MainQueue.DispatchAsync(() => {
+									//Now we need to deliver all the blood glucose entries in a list to any listeners.
+									var entries = new List<StepCountEntry>();
+
+									//Now also deliver all blood glucose readings up to the UI via the 'diff engine' for easy UITableViewController based updating.
+									foreach (var entry in results)
+									{
+										var sample = entry as HKQuantitySample;
+										if (sample != null)
+										{
+											entries.Add(new HealthKitStepCountEntry(sample) );
+
+										}
+									}
+
+									HealthStateDispatchers.StepCountListStateDispatcher.Refresh(
+										entries.Cast<StepCountEntry>().ToList());
 							});
 
 						} else if (quantityTypeKey == HKQuantityTypeIdentifierKey.BloodGlucose) {
@@ -247,7 +268,47 @@ namespace HealthKitSample
 			}
 		}
 
-		//Create our structs for HealthKit data reading, and send them to a stateless UI. This should be fun!
+
+
+		public void RemoveStepCountEntry (StepCountEntry entry)
+		{
+			//Cast the entry as a HealthKitBloodGlucoseEntry...
+			HealthKitStepCountEntry hkStepCountEntry = entry as HealthKitStepCountEntry;
+			HealthStore.DeleteObject (hkStepCountEntry.StepCountSample, new Action<bool, NSError> ((success, error) => {
+				if (!success || error != null)
+				{
+					//NOTE: If this app didn't put the entry into the blood glucose list, then there will be an error on delete.
+					AlertManager.ShowError("Health Kit", "Unable to delete step count sample: " + error);
+				}
+				else
+				{
+					//Woo! We properly removed the last entry, make sure that any listeners to the glucose states are properly updated.
+					RefreshQuantityValue(HKQuantityTypeIdentifierKey.StepCount, HKObjectType.GetQuantityType (HKQuantityTypeIdentifierKey.StepCount));
+				}
+			}));
+		}
+
+		public void AddStepCountEntry (StepCountEntry entry)
+		{
+			var date = new NSDate ();
+			var quantityType = HKObjectType.GetQuantityType (HKQuantityTypeIdentifierKey.StepCount);
+			var countUnit = HKUnit.Count;
+			var quantity = HKQuantity.FromQuantity (countUnit, entry.Count);
+			var sample = HKQuantitySample.FromType (quantityType, quantity, date, date);
+
+			HealthStore.SaveObject(sample, new Action<bool, NSError>((success, error) => {
+				if (!success || error != null)
+				{
+					//There may have been an add error for some reason.
+					AlertManager.ShowError("Health Kit", "Unable to add step count sample: " + error);
+				}
+				else
+				{
+					//Refresh all app wide blood glucose UI fields.
+					RefreshQuantityValue(HKQuantityTypeIdentifierKey.StepCount, quantityType);
+				}
+			}));
+		}
 	}
 }
 

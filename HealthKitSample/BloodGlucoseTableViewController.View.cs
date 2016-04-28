@@ -6,10 +6,10 @@ using SharedHealthState;
 
 namespace HealthKitSample
 {
-	partial class BloodGlucoseTableViewController : GeneralListViewTableViewController<BloodGlucoseEntry, BloodGlucoseEntryListState>
+	partial class BloodGlucoseTableViewController : GeneralListViewTableViewController<BloodGlucoseEntry, BloodGlucoseEntryListStore>
 	{
 		#region implemented abstract members of GeneralListViewTableViewController
-		protected override Stateless.ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListState> GetDispatcher ()
+		protected override Stateless.ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListStore> GetDispatcher ()
 		{
 			return HealthStateDispatchers.BloodGlucoseListStateDispatcher;
 		}

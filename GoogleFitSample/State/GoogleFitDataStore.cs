@@ -85,8 +85,40 @@ namespace GoogleFitSample
 			*/
 				
 			
+			await UpdateHeight ();
+			UpdateBiologicalSex ();
+
+			/*if (readResult.Buckets.Count > 0) {
+
+				Value value = null;
+				int index = 0;
+				while (value == null && index < readResult.Buckets.Count) {
+					value = GetLastValueInBucket (readResult.Buckets [index]);
+
+					if (value != null) {
+						StateDispatcher<HealthState>.State.Height = value.AsFloat ();
+						break;
+					}
+					index++;
+				}
+			} else {
+				
+			}*/
+
+			StateDispatcher<HealthState>.Refresh ();
+		}
+
+		async Task UpdateHeight()
+		{
+			//http://stackoverflow.com/questions/28482176/read-the-height-in-googlefit-in-android
+
 			DateTime endTime = DateTime.Now;
-			DateTime startTime = endTime.Subtract (TimeSpan.FromDays (1024));
+
+			//TimeSpan has to be huge, otherwise we may never get the user's height.
+			//May also have to query back for YEARS or multiple query in loop until you get an answer.
+			//Don't like the Google Fit API...
+
+			DateTime startTime = endTime.Subtract (TimeSpan.FromDays (1024)); 
 			long endTimeElapsed = GetMsSinceEpochAsLong (endTime);
 			long startTimeElapsed = GetMsSinceEpochAsLong (startTime);
 
@@ -108,27 +140,19 @@ namespace GoogleFitSample
 				}
 			}
 
-			if (readResult.Buckets.Count > 0) {
-
-				Value value = null;
-				int index = 0;
-				while (value == null && index < readResult.Buckets.Count) {
-					value = GetLastValueInBucket (readResult.Buckets [index]);
-
-					if (value != null) {
-						StateDispatcher<HealthState>.State.Height = value.AsFloat ();
-						break;
-					}
-					index++;
-				}
-			} else {
-				var value = GetLastValueInDataSet (readResult.DataSets.LastOrDefault ());
-				if (value != null) {
-					StateDispatcher<HealthState>.State.Height = value.AsFloat ();
-				}
+			var value = GetLastValueInDataSet (readResult.DataSets.LastOrDefault ());
+			if (value != null) {
+				StateDispatcher<HealthState>.State.Height = value.AsFloat ();
 			}
+		}
 
-			StateDispatcher<HealthState>.Refresh ();
+		void UpdateBiologicalSex()
+		{
+			//https://www.npmjs.com/package/cordova-plugin-health 
+			//-- Helpful mapping of HealthKit attributes to Google Fit constants.
+			// Retrieval of gender is not supported, but can be added as a custom attribute for just this app.
+
+			StateDispatcher<HealthState>.State.BiologicalSex = "Unknown";
 		}
 
 		const string DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
@@ -269,11 +293,25 @@ namespace GoogleFitSample
 
 		public void RemoveBloodGlucoseEntry (BloodGlucoseEntry entry)
 		{
+			//Google Fit doesn't support Blood Glucose, but we could add it as a custom type.
 			throw new NotImplementedException ();
 		}
 
 		public void AddBloodGlucoseEntry (BloodGlucoseEntry entry)
 		{
+			//Google Fit doesn't support Blood Glucose, but we could add it as a custom type.
+			throw new NotImplementedException ();
+		}
+
+		public void RemoveStepCountEntry (StepCountEntry entry)
+		{
+			//Google Fit doesn't support Blood Glucose, but we could add it as a custom type.
+			throw new NotImplementedException ();
+		}
+
+		public void AddStepCountEntry (StepCountEntry entry)
+		{
+			//Google Fit doesn't support Blood Glucose, but we could add it as a custom type.
 			throw new NotImplementedException ();
 		}
 

@@ -112,6 +112,12 @@
     <Compile Include="State\HealthKitDataStore.cs" />
     <Compile Include="State\HealthKitBloodGlucoseEntry.cs" />
     <Compile Include="State\DateTimeExtensions.cs" />
+    <Compile Include="State\HealthKitStepCountEntry.cs" />
+    <Compile Include="StepCountTableViewController.cs" />
+    <Compile Include="StepCountTableViewController.designer.cs">
+      <DependentUpon>StepCountTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StepCountTableViewController.View.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

@@ -7,6 +7,8 @@ namespace SharedHealthState
 		void Refresh();
 		void RemoveBloodGlucoseEntry(BloodGlucoseEntry entry);
 		void AddBloodGlucoseEntry(BloodGlucoseEntry entry);
+		void RemoveStepCountEntry(StepCountEntry entry);
+		void AddStepCountEntry(StepCountEntry entry);
 	}
 }
 

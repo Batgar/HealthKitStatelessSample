@@ -5,7 +5,7 @@ using Stateless;
 
 namespace SharedHealthState
 {
-	public class BloodGlucoseEntryListState : IListStore<BloodGlucoseEntry>
+	public class BloodGlucoseEntryListStore : IListStore<BloodGlucoseEntry>
 	{
 		#region IListStore implementation
 		public void Delete (BloodGlucoseEntry entry)
