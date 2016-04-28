@@ -68,6 +68,9 @@
     <Compile Include="State\GoogleFitDataStore.cs" />
     <Compile Include="MainActivity.HealthState.View.cs" />
     <Compile Include="MainActivity.StepCountList.View.cs" />
+    <Compile Include="StepCountListActivity.cs" />
+    <Compile Include="StepCountListAdapter.cs" />
+    <Compile Include="ListAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -83,6 +86,8 @@
     <AndroidResource Include="Resources\mipmap-xhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
+    <AndroidResource Include="Resources\layout\StepCountList.axml" />
+    <AndroidResource Include="Resources\layout\StepCountListItem.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

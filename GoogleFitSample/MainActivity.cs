@@ -28,6 +28,8 @@ namespace GoogleFitSample
 			
 			button.Click += delegate {
 				//Navigate to the Steps ListActivity.
+				var intent = new Intent(this, typeof(StepCountListActivity));
+				StartActivity(intent);
 			};
 		}
 

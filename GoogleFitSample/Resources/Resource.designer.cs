@@ -461,6 +461,9 @@ namespace GoogleFitSample
 			// aapt resource value: 0x7f090006
 			public const int standard = 2131296262;
 			
+			// aapt resource value: 0x7f090017
+			public const int stepCount = 2131296279;
+			
 			// aapt resource value: 0x7f09000d
 			public const int stepsButton = 2131296269;
 			
@@ -513,6 +516,12 @@ namespace GoogleFitSample
 			
 			// aapt resource value: 0x7f040004
 			public const int place_autocomplete_progress = 2130968580;
+			
+			// aapt resource value: 0x7f040005
+			public const int StepCountList = 2130968581;
+			
+			// aapt resource value: 0x7f040006
+			public const int StepCountListItem = 2130968582;
 			
 			static Layout()
 			{
