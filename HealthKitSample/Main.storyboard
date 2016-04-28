@@ -96,6 +96,12 @@
                                     <outletCollection property="gestureRecognizers" destination="Ah4-ja-C4b" appends="YES" id="YvF-iP-Ao0"/>
                                 </connections>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dUA-ui-sEX">
+                                <rect key="frame" x="211" y="149" width="144" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -109,6 +115,7 @@
                         <outlet property="biologicalSex" destination="R84-0x-7sI" id="aV6-1B-xgh"/>
                         <outlet property="bloodGlucose" destination="x5v-rc-vgY" id="S9W-Y3-72n"/>
                         <outlet property="bloodGlucoseRecommendation" destination="26Y-xc-2xj" id="egS-9b-ocp"/>
+                        <outlet property="weeklyStepCountValue" destination="dUA-ui-sEX" id="74S-HC-db8"/>
                         <outlet property="weight" destination="CnX-NT-GDh" id="zBP-dc-n8O"/>
                     </connections>
                 </viewController>

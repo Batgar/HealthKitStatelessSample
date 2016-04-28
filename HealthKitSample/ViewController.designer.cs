@@ -22,6 +22,9 @@ namespace HealthKitSample
 		UIKit.UILabel bloodGlucoseRecommendation { get; set; }
 
 		[Outlet]
+		UIKit.UILabel weeklyStepCountValue { get; set; }
+
+		[Outlet]
 		UIKit.UILabel weight { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -36,14 +39,19 @@ namespace HealthKitSample
 				bloodGlucose = null;
 			}
 
+			if (bloodGlucoseRecommendation != null) {
+				bloodGlucoseRecommendation.Dispose ();
+				bloodGlucoseRecommendation = null;
+			}
+
 			if (weight != null) {
 				weight.Dispose ();
 				weight = null;
 			}
 
-			if (bloodGlucoseRecommendation != null) {
-				bloodGlucoseRecommendation.Dispose ();
-				bloodGlucoseRecommendation = null;
+			if (weeklyStepCountValue != null) {
+				weeklyStepCountValue.Dispose ();
+				weeklyStepCountValue = null;
 			}
 		}
 	}

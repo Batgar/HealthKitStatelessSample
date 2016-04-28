@@ -299,7 +299,7 @@ namespace GoogleFitSample
 
 		public void AddBloodGlucoseEntry (BloodGlucoseEntry entry)
 		{
-			//Google Fit doesn't support Blood Glucose, but we could add it as a custom type.
+			//Google Fit doesn't support Blood Glucose, but we could add it as a custom type. Hmmmm....
 			throw new NotImplementedException ();
 		}
 

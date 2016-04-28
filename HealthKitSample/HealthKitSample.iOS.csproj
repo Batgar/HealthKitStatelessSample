@@ -118,6 +118,7 @@
       <DependentUpon>StepCountTableViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="StepCountTableViewController.View.cs" />
+    <Compile Include="ViewController.StepCountList.View.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

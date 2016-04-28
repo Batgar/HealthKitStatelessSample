@@ -10,6 +10,8 @@ namespace HealthKitSample
 		{
 		}
 
+
+
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
