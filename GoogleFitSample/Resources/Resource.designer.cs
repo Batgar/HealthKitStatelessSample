@@ -413,6 +413,9 @@ namespace GoogleFitSample
 			// aapt resource value: 0x7f090009
 			public const int dark = 2131296265;
 			
+			// aapt resource value: 0x7f09000e
+			public const int heightInMeters = 2131296270;
+			
 			// aapt resource value: 0x7f090000
 			public const int hybrid = 2131296256;
 			
@@ -422,44 +425,44 @@ namespace GoogleFitSample
 			// aapt resource value: 0x7f09000a
 			public const int light = 2131296266;
 			
-			// aapt resource value: 0x7f09000d
-			public const int myButton = 2131296269;
-			
 			// aapt resource value: 0x7f090001
 			public const int none = 2131296257;
 			
 			// aapt resource value: 0x7f090002
 			public const int normal = 2131296258;
 			
-			// aapt resource value: 0x7f090010
-			public const int place_autocomplete_clear_button = 2131296272;
-			
-			// aapt resource value: 0x7f090012
-			public const int place_autocomplete_powered_by_google = 2131296274;
-			
-			// aapt resource value: 0x7f090014
-			public const int place_autocomplete_prediction_primary_text = 2131296276;
-			
-			// aapt resource value: 0x7f090015
-			public const int place_autocomplete_prediction_secondary_text = 2131296277;
+			// aapt resource value: 0x7f090011
+			public const int place_autocomplete_clear_button = 2131296273;
 			
 			// aapt resource value: 0x7f090013
-			public const int place_autocomplete_progress = 2131296275;
+			public const int place_autocomplete_powered_by_google = 2131296275;
 			
-			// aapt resource value: 0x7f09000e
-			public const int place_autocomplete_search_button = 2131296270;
+			// aapt resource value: 0x7f090015
+			public const int place_autocomplete_prediction_primary_text = 2131296277;
+			
+			// aapt resource value: 0x7f090016
+			public const int place_autocomplete_prediction_secondary_text = 2131296278;
+			
+			// aapt resource value: 0x7f090014
+			public const int place_autocomplete_progress = 2131296276;
 			
 			// aapt resource value: 0x7f09000f
-			public const int place_autocomplete_search_input = 2131296271;
+			public const int place_autocomplete_search_button = 2131296271;
 			
-			// aapt resource value: 0x7f090011
-			public const int place_autocomplete_separator = 2131296273;
+			// aapt resource value: 0x7f090010
+			public const int place_autocomplete_search_input = 2131296272;
+			
+			// aapt resource value: 0x7f090012
+			public const int place_autocomplete_separator = 2131296274;
 			
 			// aapt resource value: 0x7f090003
 			public const int satellite = 2131296259;
 			
 			// aapt resource value: 0x7f090006
 			public const int standard = 2131296262;
+			
+			// aapt resource value: 0x7f09000d
+			public const int stepsButton = 2131296269;
 			
 			// aapt resource value: 0x7f090004
 			public const int terrain = 2131296260;

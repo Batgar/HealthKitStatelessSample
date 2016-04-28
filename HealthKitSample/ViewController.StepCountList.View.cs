@@ -11,7 +11,7 @@ namespace HealthKitSample
 
 		public void Receive (System.Collections.Generic.IList<StepCountEntry> list, System.Collections.Generic.IList<Stateless.Change> changeset)
 		{
-			this.weeklyStepCountValue.Text = list.Sum(s => s.Count).ToString();
+			this.weeklyStepCountValue.Text = list.Where(s => (DateTime.Now - s.StartEntryDateTime).TotalDays < 7).Sum(s => s.Count).ToString();
 		}
 
 		#endregion

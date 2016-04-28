@@ -1,6 +1,7 @@
 ﻿using System;
 using Stateless;
 using SharedHealthState;
+using Android.Widget;
 
 namespace GoogleFitSample
 {
@@ -8,11 +9,14 @@ namespace GoogleFitSample
 	{
 		private void Bind() {
 			StateDispatcher<HealthState>.Bind(this);
+			HealthStateDispatchers.StepCountListStateDispatcher.Bind (this);
 		}
 
 		public void Receive(HealthState healthState)
 		{
-			var i = 0;
+			var height = healthState.Height;
+			var textView = FindViewById<TextView> (Resource.Id.heightInMeters);
+			textView.Text = string.Format("Height: {0}", height);
 		}
 	}
 }

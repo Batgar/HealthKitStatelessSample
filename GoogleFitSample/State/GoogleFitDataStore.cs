@@ -105,7 +105,56 @@ namespace GoogleFitSample
 				
 			}*/
 
-			StateDispatcher<HealthState>.Refresh ();
+			var stepEntries = await UpdateStepEntries ();
+
+			_activity.RunOnUiThread(() => {
+				StateDispatcher<HealthState>.Refresh ();
+				if (stepEntries != null)
+				{
+					HealthStateDispatchers.StepCountListStateDispatcher.Refresh(stepEntries);
+				}
+			});
+		}
+
+		async Task<List<StepCountEntry>> UpdateStepEntries()
+		{
+			//https://github.com/xamarin/monodroid-samples/blob/master/google-services/Fitness/BasicHistoryApi/BasicHistoryApi/MainActivity.cs
+			DateTime endTime = DateTime.Now;
+			DateTime startTime = endTime.Subtract (TimeSpan.FromDays (7)); 
+			long endTimeElapsed = GetMsSinceEpochAsLong (endTime);
+			long startTimeElapsed = GetMsSinceEpochAsLong (startTime);
+
+
+			var readRequest = new DataReadRequest.Builder ()
+				.Aggregate (Android.Gms.Fitness.Data.DataType.TypeStepCountDelta, Android.Gms.Fitness.Data.DataType.AggregateStepCountDelta)
+				.SetTimeRange(startTimeElapsed, endTimeElapsed, TimeUnit.Milliseconds)
+				.BucketByTime(1, TimeUnit.Days)
+				.Build ();
+
+
+
+			var readResult = await FitnessClass.HistoryApi.ReadDataAsync (mClient, readRequest);
+
+			if (!readResult.Status.IsSuccess) {
+				if (readResult.Status.HasResolution) {
+					readResult.Status.StartResolutionForResult (_activity, REQUEST_GET_REQUEST_PERMISSION);
+					return null;
+				}
+			}
+
+			var stepCountEntryList = new List<StepCountEntry>();
+			foreach (var bucket in readResult.Buckets) {
+				var dataSet = bucket.DataSets.LastOrDefault ();
+				if (dataSet != null) {
+					var value = GetLastValueInDataSet (dataSet);
+					if (value != null) {
+						stepCountEntryList.Add (new StepCountEntry (){ Count = Convert.ToDouble(value.AsInt ()) });
+					}
+				}
+			}
+
+			//We should have a bucket per day, parse it all out.
+			return stepCountEntryList;
 		}
 
 		async Task UpdateHeight()
