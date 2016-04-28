@@ -20,8 +20,18 @@ namespace GoogleFitSample
 		{
 			base.OnCreate (savedInstanceState);
 
-			// Create your application here
+			this.SetContentView (this.LayoutInflater.Inflate (Resource.Layout.StepCountList, null));
+
 			this.ListAdapter = new StepCountListAdapter(this);
+
+			Button button = FindViewById<Button> (Resource.Id.addStepCountBtn);
+
+			button.Click += delegate {
+				(this.ListAdapter as StepCountListAdapter).AddStepEntry(1545);
+			};
+
+
+
 		}
 	}
 }

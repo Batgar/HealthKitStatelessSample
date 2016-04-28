@@ -358,10 +358,43 @@ namespace GoogleFitSample
 			throw new NotImplementedException ();
 		}
 
-		public void AddStepCountEntry (StepCountEntry entry)
+		public async void AddStepCountEntry (StepCountEntry entry)
 		{
-			//Google Fit doesn't support Blood Glucose, but we could add it as a custom type.
-			throw new NotImplementedException ();
+			Log.Info (TAG, "Creating a new data insert request");
+
+			// Set a start and end time for our data, using a start time of 1 hour before this moment.
+			DateTime endTime = DateTime.Now;
+			DateTime startTime = endTime.Subtract (TimeSpan.FromHours (1));
+			long endTimeElapsed = GetMsSinceEpochAsLong (endTime);
+			long startTimeElapsed = GetMsSinceEpochAsLong (startTime);
+
+			// Create a data source
+			var dataSource = new DataSource.Builder ()
+				.SetAppPackageName (this._activity)
+				.SetDataType (Android.Gms.Fitness.Data.DataType.TypeStepCountDelta)
+				.SetName (TAG + " - step count")
+				.SetType (DataSource.TypeRaw)
+				.Build ();
+
+			// Create a data set
+			//const int stepCountDelta = 1000;
+			var dataSet = DataSet.Create (dataSource);
+			DataPoint dataPoint = dataSet.CreateDataPoint ()
+				.SetTimeInterval (startTimeElapsed, endTimeElapsed, TimeUnit.Milliseconds);
+			dataPoint.GetValue (Field.FieldSteps).SetInt (Convert.ToInt32(entry.Count));
+			dataSet.Add (dataPoint);
+
+			Log.Info (TAG, "Inserting the dataset in the History API");
+			var insertStatus =  await FitnessClass.HistoryApi.InsertDataAsync (mClient, dataSet);
+
+			if (!insertStatus.IsSuccess) {
+				Log.Info (TAG, "There was a problem inserting the dataset.");
+				return;
+			}
+
+			Log.Info (TAG, "Data insert was successful!");
+
+			RefreshHealthStateData ();
 		}
 
 		#endregion

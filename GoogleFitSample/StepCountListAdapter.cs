@@ -65,6 +65,11 @@ namespace GoogleFitSample
 			view.FindViewById<TextView>(Resource.Id.stepCount).Text = string.Format("Steps {0}" , StepCountEntries[position].Count);
 			return view;
 		}
+
+		internal void AddStepEntry(int stepCount)
+		{
+			HealthStateDispatchers.StepCountListStateDispatcher.Add (new StepCountEntry () { Count = stepCount });
+		}
 	}
 }
 

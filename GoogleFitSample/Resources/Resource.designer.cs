@@ -401,6 +401,9 @@ namespace GoogleFitSample
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f090017
+			public const int addStepCountBtn = 2131296279;
+			
 			// aapt resource value: 0x7f09000b
 			public const int adjust_height = 2131296267;
 			
@@ -461,8 +464,8 @@ namespace GoogleFitSample
 			// aapt resource value: 0x7f090006
 			public const int standard = 2131296262;
 			
-			// aapt resource value: 0x7f090017
-			public const int stepCount = 2131296279;
+			// aapt resource value: 0x7f090018
+			public const int stepCount = 2131296280;
 			
 			// aapt resource value: 0x7f09000d
 			public const int stepsButton = 2131296269;
