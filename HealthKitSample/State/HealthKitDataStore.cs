@@ -80,7 +80,8 @@ namespace HealthKitSample
 			NSSortDescriptor timeSortDescriptor = new NSSortDescriptor(HKSample.SortIdentifierEndDate, false);
 
 			// Since we are interested in retrieving the user's latest sample, we sort the samples in descending order, and set the limit to 1. We are not filtering the data, and so the predicate is set to nil.
-			HKSampleQuery query = new HKSampleQuery(quantityType, null, 100,  new NSSortDescriptor[]{timeSortDescriptor}, new HKSampleQueryResultsHandler(new Action<HKSampleQuery,HKSample[],NSError>((query2, results, error) =>
+			HKSampleQuery query = new HKSampleQuery(quantityType, null, 100,  new NSSortDescriptor[]{timeSortDescriptor}, 
+				new HKSampleQueryResultsHandler(new Action<HKSampleQuery,HKSample[],NSError>((query2, results, error) =>
 				{
 					if (results != null && results.Length > 0) {
 						

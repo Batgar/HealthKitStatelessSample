@@ -1,11 +1,13 @@
 ﻿using Android.App;
 using Android.Widget;
 using Android.OS;
+using SharedHealthState;
+using Android.Content;
 
 namespace GoogleFitSample
 {
 	[Activity (Label = "GoogleFitSample", MainLauncher = true, Icon = "@mipmap/icon")]
-	public class MainActivity : Activity
+	public partial class MainActivity : Activity
 	{
 		int count = 1;
 
@@ -16,6 +18,10 @@ namespace GoogleFitSample
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
 
+			TinyIoC.TinyIoCContainer.Current.Register<IHealthDataStore> (new GoogleFitDataStore (this));
+
+			this.Bind ();
+
 			// Get our button from the layout resource,
 			// and attach an event to it
 			Button button = FindViewById<Button> (Resource.Id.myButton);
@@ -23,6 +29,12 @@ namespace GoogleFitSample
 			button.Click += delegate {
 				button.Text = string.Format ("{0} clicks!", count++);
 			};
+		}
+
+		protected override void OnActivityResult (int requestCode, Result resultCode, Intent data)
+		{
+			var googleFitDataStore = TinyIoC.TinyIoCContainer.Current.Resolve<IHealthDataStore> () as GoogleFitDataStore;
+			googleFitDataStore.ProcessActivityResult (requestCode, resultCode);
 		}
 	}
 }
