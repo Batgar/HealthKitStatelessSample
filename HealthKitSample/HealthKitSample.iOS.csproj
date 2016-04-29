@@ -109,20 +109,20 @@
     <Compile Include="ViewController.BloodGlucoseRecommendation.View.cs" />
     <Compile Include="ViewController.Health.View.cs" />
     <Compile Include="GeneralListViewTableViewController.cs" />
-    <Compile Include="State\HealthKitDataStore.cs" />
-    <Compile Include="State\HealthKitBloodGlucoseEntry.cs" />
-    <Compile Include="State\DateTimeExtensions.cs" />
-    <Compile Include="State\HealthKitStepCountEntry.cs" />
     <Compile Include="StepCountTableViewController.cs" />
     <Compile Include="StepCountTableViewController.designer.cs">
       <DependentUpon>StepCountTableViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="StepCountTableViewController.View.cs" />
     <Compile Include="ViewController.StepCountList.View.cs" />
+    <Compile Include="DataStore\HealthKitDataStore.cs" />
+    <Compile Include="DataStore\HealthKitBloodGlucoseEntry.cs" />
+    <Compile Include="DataStore\DateTimeExtensions.cs" />
+    <Compile Include="DataStore\HealthKitStepCountEntry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="State\" />
+    <Folder Include="DataStore\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stateless\Stateless.csproj">

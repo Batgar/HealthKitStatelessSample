@@ -65,12 +65,13 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="State\GoogleFitDataStore.cs" />
     <Compile Include="MainActivity.HealthState.View.cs" />
     <Compile Include="MainActivity.StepCountList.View.cs" />
     <Compile Include="StepCountListActivity.cs" />
     <Compile Include="StepCountListAdapter.cs" />
     <Compile Include="ListAdapter.cs" />
+    <Compile Include="MainActivity.BloodGlucoseRecommendation.View.cs" />
+    <Compile Include="DataStore\GoogleFitDataStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -91,7 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
-    <Folder Include="State\" />
+    <Folder Include="DataStore\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>

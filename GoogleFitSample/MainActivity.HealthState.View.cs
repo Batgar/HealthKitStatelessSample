@@ -9,6 +9,7 @@ namespace GoogleFitSample
 	{
 		private void Bind() {
 			StateDispatcher<HealthState>.Bind(this);
+			StateDispatcher<BloodGlucoseRecommendationState>.Bind (this);
 			HealthStateDispatchers.StepCountListStateDispatcher.Bind (this);
 		}
 
