@@ -118,8 +118,11 @@ Let's dig deeper and see how state updates occur, in this case from the `HealthK
 var healthState = StateDispatcher<HealthState>.State;
 
 //Update the BloodGlucose member on the single HealthState object within the app.
+//We use a special mutator object because the properties on HealthState are marked with
+//'internal set' to ensure that the properties cannot be mutated outside of any other assembly
+//than the original assembly. This is a 'pseudo-hack' to ensure mutation only occurs in one location.
 var mgPerDL = HKUnit.FromString("mg/dL");
-healthState.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
+HealthStateMutator.MutateBloodGlucose(healthState, () => lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL));
 
 
 //At this point all IView<T> based subscribers bound to the dispatcher will update.
