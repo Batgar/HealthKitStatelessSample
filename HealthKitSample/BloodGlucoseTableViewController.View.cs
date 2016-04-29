@@ -27,7 +27,7 @@ namespace HealthKitSample
 		//This is where the "+" toolbar button will bind to.
 		private void AddBloodGlucoseEntry(double bloodGlucoseValue)
 		{
-			this.AddRow(new BloodGlucoseEntry(){BloodGlucoseValue = bloodGlucoseValue});
+			this.AddRow(new BloodGlucoseEntry(bloodGlucoseValue));
 		}
 	}
 }

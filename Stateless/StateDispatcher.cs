@@ -23,6 +23,7 @@ namespace Stateless
 
 		public static void Refresh()
 		{
+			
 			foreach (var s in _subscribers)
 			{
 				s.Receive(State);

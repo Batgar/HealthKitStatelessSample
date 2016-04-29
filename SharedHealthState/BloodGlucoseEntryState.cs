@@ -7,10 +7,18 @@ namespace SharedHealthState
 	//A blood glucose entry can never be edited, just added and deleted.
 	public class BloodGlucoseEntry : IIdentifiable
 	{		
+		public BloodGlucoseEntry()
+		{
+		}
 
-		public double BloodGlucoseValue {get; set;}
-		public DateTime StartEntryDateTime {get; set;}
-		public DateTime EndEntryDateTime {get; set;}
+		public BloodGlucoseEntry(double glucoseValue)
+		{
+			BloodGlucoseValue = glucoseValue;
+		}
+
+		public double BloodGlucoseValue {get; protected set;}
+		public DateTime StartEntryDateTime {get; protected set;}
+		public DateTime EndEntryDateTime {get; protected set;}
 
 		public int ID
 		{

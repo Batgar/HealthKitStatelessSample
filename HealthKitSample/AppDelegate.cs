@@ -22,9 +22,12 @@ namespace HealthKitSample
 
 			TinyIoC.TinyIoCContainer.Current.Register<IHealthDataStore> (healthKitDataStore);
 
+
 			// Override point for customization after application launch.
 			// If not required for your application you can safely delete this method
 			healthKitDataStore.GetUserAuthorizationIfNeeded();
+
+			healthKitDataStore.Refresh ();
 
 			return true;
 		}

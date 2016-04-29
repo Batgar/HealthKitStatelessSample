@@ -338,7 +338,7 @@ namespace GoogleFitSample
 			//This method is responsible for processing the Google Fit entries, and shooting out
 			//HealthState, BloodGlucoseRecommendationState, and BloodGlucoseEntryListState / BloodBlucoseEntryState objects.
 			//For now we are just going to have Google Fit shoot out HealthState, because BloodGlucose is not supported by Google Fit.
-
+			RefreshHealthStateData();
 		}
 
 		public void RemoveBloodGlucoseEntry (BloodGlucoseEntry entry)

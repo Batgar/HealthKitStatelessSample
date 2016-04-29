@@ -33,6 +33,9 @@ namespace HealthKitSample
 						if (!success || error != null)
 						{
 							AlertManager.ShowError("Health Data", "Unable to access health data.");
+						} else {
+							//Refresh all data if we have auth!
+							Refresh();
 						}
 					});
 			}
