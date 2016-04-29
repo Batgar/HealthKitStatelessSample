@@ -97,8 +97,9 @@ namespace HealthKitSample
 
 							DispatchQueue.MainQueue.DispatchAsync(() => {
 								var dataStore = StateDispatcher<HealthState>.State;
-									
-								dataStore.Height = quantity.GetDoubleValue(heightUnit);
+
+									HealthStateMutator.MutateHeight(dataStore,
+										() => quantity.GetDoubleValue(heightUnit));
 
 								StateDispatcher<HealthState>.Refresh();								
 							});
@@ -133,7 +134,8 @@ namespace HealthKitSample
 								var healthState = StateDispatcher<HealthState>.State;
 
 								var mgPerDL = HKUnit.FromString("mg/dL");
-								healthState.BloodGlucose = lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL);
+									HealthStateMutator.MutateBloodGlucose(healthState,
+										() =>  lastBloodGlucoseQuantity.GetDoubleValue(mgPerDL));
 
 
 								//At this point all UI subscribers to the HealthState object will update.
@@ -142,7 +144,9 @@ namespace HealthKitSample
 							
 
 								var recommendationStore = StateDispatcher<BloodGlucoseRecommendationState>.State;
-								recommendationStore.BloodGlucose = healthState.BloodGlucose;
+								
+								BloodGlucoseRecommendationMutator.MutateBloodGlucose(
+									recommendationStore, () => healthState.BloodGlucose);
 
 								//At this point all UI subscribers to the BloodGlucoseRecommendationState will update.
 								StateDispatcher<BloodGlucoseRecommendationState>.Refresh();
@@ -230,7 +234,8 @@ namespace HealthKitSample
 					DispatchQueue.MainQueue.DispatchAsync (() => {
 						var dataStore = StateDispatcher<HealthState>.State;
 
-						dataStore.BiologicalSex = GetDisplayableBiologicalSex(biologicalSex.BiologicalSex);
+						HealthStateMutator.MutateBiologicalSex(
+							dataStore, () => GetDisplayableBiologicalSex(biologicalSex.BiologicalSex));
 
 						StateDispatcher<HealthState>.Refresh();
 					});

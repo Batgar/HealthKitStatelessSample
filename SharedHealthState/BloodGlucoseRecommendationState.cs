@@ -15,7 +15,7 @@ namespace SharedHealthState
 		public double BloodGlucose 
 		{
 			get { return _bloodGlucose;}
-			set{ 
+			internal set{ 
 				_bloodGlucose = value;
 				ResetRecommendations ();
 			}
@@ -33,6 +33,14 @@ namespace SharedHealthState
 		}
 
 		public string RecommendationText {get; private set;}
+	}
+
+	public static class BloodGlucoseRecommendationMutator
+	{
+		public static void MutateBloodGlucose(BloodGlucoseRecommendationState state, Func<double> mutator)
+		{
+			state.BloodGlucose = mutator ();
+		}
 	}
 }
 

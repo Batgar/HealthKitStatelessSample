@@ -28,7 +28,7 @@ namespace HealthKitSample
 		//This is where the "+" toolbar button will bind to.
 		private void AddStepCountEntry(double steps)
 		{
-			this.AddRow(new StepCountEntry(){Count = steps});
+			this.AddRow(new StepCountEntry(steps));
 		}
 	}
 }

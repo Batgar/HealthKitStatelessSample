@@ -68,7 +68,7 @@ namespace GoogleFitSample
 
 		internal void AddStepEntry(int stepCount)
 		{
-			HealthStateDispatchers.StepCountListStateDispatcher.Add (new StepCountEntry () { Count = stepCount });
+			HealthStateDispatchers.StepCountListStateDispatcher.Add (new StepCountEntry (stepCount));
 		}
 	}
 }

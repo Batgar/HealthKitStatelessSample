@@ -5,9 +5,18 @@ namespace SharedHealthState
 {
 	public class StepCountEntry : IIdentifiable
 	{		
-		public double Count {get; set;}
-		public DateTime StartEntryDateTime {get; set;}
-		public DateTime EndEntryDateTime {get; set;}
+		public StepCountEntry()
+		{
+		}
+
+		public StepCountEntry(double stepCount)
+		{
+			Count = stepCount;
+		}
+
+		public double Count {get; protected set;}
+		public DateTime StartEntryDateTime {get; protected set;}
+		public DateTime EndEntryDateTime {get; protected set;}
 
 		public int ID
 		{

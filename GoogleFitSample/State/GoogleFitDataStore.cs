@@ -148,7 +148,7 @@ namespace GoogleFitSample
 				if (dataSet != null) {
 					var value = GetLastValueInDataSet (dataSet);
 					if (value != null) {
-						stepCountEntryList.Add (new StepCountEntry (){ Count = Convert.ToDouble(value.AsInt ()) });
+						stepCountEntryList.Add (new StepCountEntry (Convert.ToDouble(value.AsInt ())));
 					}
 				}
 			}
@@ -191,7 +191,8 @@ namespace GoogleFitSample
 
 			var value = GetLastValueInDataSet (readResult.DataSets.LastOrDefault ());
 			if (value != null) {
-				StateDispatcher<HealthState>.State.Height = value.AsFloat ();
+				HealthStateMutator.MutateHeight(
+					StateDispatcher<HealthState>.State, () => value.AsFloat ());
 			}
 		}
 
@@ -200,8 +201,8 @@ namespace GoogleFitSample
 			//https://www.npmjs.com/package/cordova-plugin-health 
 			//-- Helpful mapping of HealthKit attributes to Google Fit constants.
 			// Retrieval of gender is not supported, but can be added as a custom attribute for just this app.
-
-			StateDispatcher<HealthState>.State.BiologicalSex = "Unknown";
+			HealthStateMutator.MutateBiologicalSex(
+				StateDispatcher<HealthState>.State, () => "Unknown");
 		}
 
 		const string DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
