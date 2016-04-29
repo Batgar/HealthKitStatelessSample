@@ -23,7 +23,7 @@ I had to make some interesting compromises at the data end of the solution to al
 Highlights
 ==========
 
-
+Please see the [overall architecture document](https://github.com/Batgar/HealthKitStatelessSample/blob/master/Stateless%20Cross-Platform%20Health%20Data%20Infrastructure.pdf) for 1 (of many) state objects. It should help serve as a guide as to where to look in the code.
 
 
 In the overall Stateless design there are the following main actors:
