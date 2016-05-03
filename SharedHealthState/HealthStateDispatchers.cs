@@ -7,6 +7,7 @@ namespace SharedHealthState
 	{
 		static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListStore> _bloodGlucoseListStateDispatcher;
 		static ListStateDispatcher<StepCountEntry, StepCountEntryListStore> _stepCountEntryListStateDispatcher;
+		static ListStateDispatcher<FoodEntry, FoodEntryListStore> _foodEntryListStateDispatcher;
 
 		public static ListStateDispatcher<BloodGlucoseEntry, BloodGlucoseEntryListStore> BloodGlucoseListStateDispatcher
 		{
@@ -25,6 +26,16 @@ namespace SharedHealthState
 					_stepCountEntryListStateDispatcher = new ListStateDispatcher<StepCountEntry, StepCountEntryListStore> ();
 				}
 				return _stepCountEntryListStateDispatcher;
+			}
+		}
+
+		public static ListStateDispatcher<FoodEntry, FoodEntryListStore> FoodListStateDispatcher
+		{
+			get{
+				if (_foodEntryListStateDispatcher == null) {
+					_foodEntryListStateDispatcher = new ListStateDispatcher<FoodEntry, FoodEntryListStore> ();
+				}
+				return _foodEntryListStateDispatcher;
 			}
 		}
 	}

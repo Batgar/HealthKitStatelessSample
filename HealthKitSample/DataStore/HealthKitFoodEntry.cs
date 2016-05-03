@@ -2,6 +2,7 @@
 using SharedHealthState;
 using HealthKit;
 using System.Linq;
+using Foundation;
 
 namespace HealthKitSample
 {
@@ -11,26 +12,32 @@ namespace HealthKitSample
 		{
 			FoodCorrelation = correlation;
 
-			var mgUnit = HKUnit.FromString("mg");
-
-			FoodName = correlation.Metadata.FoodType;
-
-			double potassiumMg = double.MinValue;
-
-			var potassiumQuantityType = HKQuantityType.GetQuantityType(HKQuantityTypeIdentifierKey.DietaryPotassium);
-			var potassiumSample = correlation.GetObjects(potassiumQuantityType).FirstOrDefault();
-			if (potassiumSample != null)
-			{
-				var potassiumQuantity = (potassiumSample as HKQuantitySample).Quantity;
-
-				Potassium = potassiumQuantity.GetDoubleValue(mgUnit);
-			}
+			FoodName = (correlation.Metadata.Dictionary[HKMetadataKey.FoodType] as NSString);
 
 			//Crack open the correlation and retrieve stuff and put it into our private members.
+			SetLocalPropertyFromHealthKit (correlation, HKQuantityTypeIdentifierKey.DietaryPotassium, "mg", (potassium) => {
+				Potassium = potassium;
+			});
+
+			SetLocalPropertyFromHealthKit (correlation, HKQuantityTypeIdentifierKey.DietaryFiber, "g", (fiber) => {
+				Fiber = fiber;
+			});
 
 			StartEntryDateTime = DateTimeExtensions.NSDateToDateTime (correlation.StartDate);
 			EndEntryDateTime = DateTimeExtensions.NSDateToDateTime(correlation.EndDate);
 
+		}
+
+		private void SetLocalPropertyFromHealthKit(HKCorrelation correlation, NSString quantityTypeIdentifier, string unitString, Action<double> setter)
+		{
+			var unit = HKUnit.FromString(unitString);
+			var quantityType = HKQuantityType.GetQuantityType(quantityTypeIdentifier);
+			var sample = correlation.GetObjects(quantityType).FirstOrDefault();
+			if (sample != null)
+			{
+				var quantity = (sample as HKQuantitySample).Quantity;
+				setter(quantity.GetDoubleValue(unit));
+			}
 		}
 
 		public HKCorrelation FoodCorrelation {get; private set;}

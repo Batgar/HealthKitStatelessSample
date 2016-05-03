@@ -55,6 +55,7 @@ namespace HealthKitSample
 			HKQuantityTypeIdentifierKey.BodyMass,
 			HKQuantityTypeIdentifierKey.StepCount,
 			HKQuantityTypeIdentifierKey.DietaryPotassium,
+			HKQuantityTypeIdentifierKey.DietaryFiber,
 		};
 
 		static NSString[] CharacteristicTypesToRead = new NSString[] {
@@ -217,6 +218,11 @@ namespace HealthKitSample
 				{
 					foodEntries.Add(new HealthKitFoodEntry(correlation));
 				}
+
+				DispatchQueue.MainQueue.DispatchAsync(() => {
+					HealthStateDispatchers.FoodListStateDispatcher.Refresh(foodEntries.Cast<FoodEntry>().ToList());
+				});
+
 			}));
 
 			HealthStore.ExecuteQuery (query);
@@ -299,21 +305,27 @@ namespace HealthKitSample
 				
 		}
 
+		private static HKQuantitySample CreateQuantitySample(string unitString, double value, NSString quantityTypeIdentifier)
+		{
+			var date = new NSDate ();
+			var unit = HKUnit.FromString (unitString);
+			var quantity = HKQuantity.FromQuantity (unit, value);
+
+			var quantityType = HKQuantityType.GetQuantityType (quantityTypeIdentifier);
+
+			return HKQuantitySample.FromType (quantityType, quantity, date, date);
+		}
+
 		public void AddFoodEntry(FoodEntry foodEntry)
 		{
 			var date = new NSDate ();
 			var correlationType = HKCorrelationType.GetCorrelationType (HKCorrelationTypeKey.IdentifierFood);
-			var mg = HKUnit.FromString ("mg");
-			var quantity = HKQuantity.FromQuantity (mg, foodEntry.Potassium);
 
-			var quantityType = HKQuantityType.GetQuantityType (HKQuantityTypeIdentifierKey.DietaryPotassium);
-
-			var sample = HKQuantitySample.FromType (quantityType, quantity, date, date);
-
-			var metadata = new HKMetadata (new NSDictionary (foodEntry.FoodName, HKMetadataKey.FoodType));
+			var metadata = new HKMetadata (new NSDictionary (HKMetadataKey.FoodType, foodEntry.FoodName));
 
 			var correlation = HKCorrelation.Create(correlationType, NSDate.Now, NSDate.Now, new NSSet(new object[]{
-				sample //Add more samples to the correlation for food as they are added to the FoodEntry class.
+				CreateQuantitySample("mg", foodEntry.Potassium, HKQuantityTypeIdentifierKey.DietaryPotassium),
+				CreateQuantitySample("g", foodEntry.Fiber, HKQuantityTypeIdentifierKey.DietaryFiber),
 			}), metadata);
 
 			HealthStore.SaveObject(correlation, (success, error) => {

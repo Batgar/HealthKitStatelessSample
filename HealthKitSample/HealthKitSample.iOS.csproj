@@ -120,6 +120,11 @@
     <Compile Include="DataStore\DateTimeExtensions.cs" />
     <Compile Include="DataStore\HealthKitStepCountEntry.cs" />
     <Compile Include="DataStore\HealthKitFoodEntry.cs" />
+    <Compile Include="FoodTableViewController.cs" />
+    <Compile Include="FoodTableViewController.designer.cs">
+      <DependentUpon>FoodTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FoodTableViewController.View.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

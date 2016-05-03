@@ -39,6 +39,7 @@ namespace GoogleFitSample
 		private async void RefreshHealthStateData ()
 		{
 			await UpdateHeight ();
+			await UpdateFood ();
 			UpdateBiologicalSex ();
 
 
@@ -91,6 +92,46 @@ namespace GoogleFitSample
 
 			//We should have a bucket per day, parse it all out.
 			return stepCountEntryList;
+		}
+
+		async Task UpdateFood()
+		{
+			
+			DateTime endTime = DateTime.Now;
+
+			DateTime startTime = endTime.Subtract (TimeSpan.FromDays (7)); 
+			long endTimeElapsed = GetMsSinceEpochAsLong (endTime);
+			long startTimeElapsed = GetMsSinceEpochAsLong (startTime);
+
+
+			var readRequest = new DataReadRequest.Builder ()
+				.Read (Android.Gms.Fitness.Data.DataType.TypeNutrition)
+				.SetTimeRange(startTimeElapsed, endTimeElapsed, TimeUnit.Milliseconds)
+				.SetLimit(1)
+				.Build ();
+
+			var readResult = await FitnessClass.HistoryApi.ReadDataAsync (mClient, readRequest);
+
+			//The result may need to popup additional user security dialogs for the user to grant access to the specific data points.
+			if (!readResult.Status.IsSuccess) {
+				if (readResult.Status.HasResolution) {
+					readResult.Status.StartResolutionForResult (_activity, REQUEST_GET_REQUEST_PERMISSION);
+					return;
+				}
+			}
+
+			foreach (var dataSet in readResult.DataSets) {
+				foreach (var dataPoint in dataSet.DataPoints) {
+					//See if dataPoint has nutrient info in it.
+					var foodNameValue = dataPoint.GetValue (Field.FieldFoodItem);
+					var foodName = foodNameValue.AsString ();
+
+					var nutrientsValue = dataPoint.GetValue (Field.FieldNutrients);
+					//var calories = nutrientsValue.GetKeyValue (Field.FieldCalories);
+					var i = 0;
+				}
+			}
+
 		}
 
 		async Task UpdateHeight()
