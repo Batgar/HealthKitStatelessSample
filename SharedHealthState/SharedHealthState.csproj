@@ -39,6 +39,8 @@
     <Compile Include="StepCountEntry.cs" />
     <Compile Include="StepCountEntryListStore.cs" />
     <Compile Include="BloodGlucoseEntryListStore.cs" />
+    <Compile Include="FoodEntry.cs" />
+    <Compile Include="FoodEntryListStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

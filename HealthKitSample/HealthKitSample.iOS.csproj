@@ -119,6 +119,7 @@
     <Compile Include="DataStore\HealthKitBloodGlucoseEntry.cs" />
     <Compile Include="DataStore\DateTimeExtensions.cs" />
     <Compile Include="DataStore\HealthKitStepCountEntry.cs" />
+    <Compile Include="DataStore\HealthKitFoodEntry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

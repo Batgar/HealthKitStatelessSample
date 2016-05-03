@@ -38,72 +38,9 @@ namespace GoogleFitSample
 		
 		private async void RefreshHealthStateData ()
 		{
-			
-
-			// Setting a start and end date using a range of 1 week before this moment.
-			/*Calendar cal = Calendar.getInstance();
-			Date now = new Date();
-			cal.setTime(now);
-			long endTime = cal.getTimeInMillis();
-			cal.add(Calendar.WEEK_OF_YEAR, -1);
-			long startTime = cal.getTimeInMillis();
-
-			java.text.DateFormat dateFormat = getDateInstance();
-			Log.i(TAG, "Range Start: " + dateFormat.format(startTime));
-			Log.i(TAG, "Range End: " + dateFormat.format(endTime));
-
-			DataReadRequest readRequest = new DataReadRequest.Builder()
-				// The data request can specify multiple data types to return, effectively
-				// combining multiple data queries into one call.
-				// In this example, it's very unlikely that the request is for several hundred
-				// datapoints each consisting of a few steps and a timestamp.  The more likely
-				// scenario is wanting to see how many steps were walked per day, for 7 days.
-				.aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
-				// Analogous to a "Group By" in SQL, defines how data should be aggregated.
-				// bucketByTime allows for a time span, whereas bucketBySession would allow
-				// bucketing by "sessions", which would need to be defined in code.
-				.bucketByTime(1, TimeUnit.DAYS)
-				.setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-				.build();*/
-
-			//https://github.com/xamarin/monodroid-samples/blob/master/google-services/Fitness/BasicHistoryApi/BasicHistoryApi/MainActivity.cs
-			/*
-				// Setting a start and end date using a range of 1 week before this moment.
-				DateTime endTime = DateTime.Now;
-				DateTime startTime = endTime.Subtract (TimeSpan.FromDays (7));
-				long endTimeElapsed = GetMsSinceEpochAsLong (endTime);
-				long startTimeElapsed = GetMsSinceEpochAsLong (startTime);
-
-				Log.Info (TAG, "Range Start: " + startTime.ToString (DATE_FORMAT));
-				Log.Info (TAG, "Range End: " + endTime.ToString (DATE_FORMAT));
-
-				var readRequest = new DataReadRequest.Builder ()
-					.Aggregate (DataType.TypeStepCountDelta, DataType.AggregateStepCountDelta)
-					.BucketByTime (1, TimeUnit.Days)
-					.SetTimeRange (startTimeElapsed, endTimeElapsed, TimeUnit.Milliseconds)
-					.Build ();
-			*/
-				
-			
 			await UpdateHeight ();
 			UpdateBiologicalSex ();
 
-			/*if (readResult.Buckets.Count > 0) {
-
-				Value value = null;
-				int index = 0;
-				while (value == null && index < readResult.Buckets.Count) {
-					value = GetLastValueInBucket (readResult.Buckets [index]);
-
-					if (value != null) {
-						StateDispatcher<HealthState>.State.Height = value.AsFloat ();
-						break;
-					}
-					index++;
-				}
-			} else {
-				
-			}*/
 
 			var stepEntries = await UpdateStepEntries ();
 
@@ -131,10 +68,9 @@ namespace GoogleFitSample
 				.BucketByTime(1, TimeUnit.Days)
 				.Build ();
 
-
-
 			var readResult = await FitnessClass.HistoryApi.ReadDataAsync (mClient, readRequest);
 
+			//The result may need to popup additional user security dialogs for the user to grant access to the specific data points.
 			if (!readResult.Status.IsSuccess) {
 				if (readResult.Status.HasResolution) {
 					readResult.Status.StartResolutionForResult (_activity, REQUEST_GET_REQUEST_PERMISSION);
@@ -178,10 +114,9 @@ namespace GoogleFitSample
 				.SetLimit(1)
 				.Build ();
 
-
-
 			var readResult = await FitnessClass.HistoryApi.ReadDataAsync (mClient, readRequest);
 
+			//The result may need to popup additional user security dialogs for the user to grant access to the specific data points.
 			if (!readResult.Status.IsSuccess) {
 				if (readResult.Status.HasResolution) {
 					readResult.Status.StartResolutionForResult (_activity, REQUEST_GET_REQUEST_PERMISSION);
@@ -241,28 +176,10 @@ namespace GoogleFitSample
 		const int REQUEST_OAUTH = 1;
 		const int REQUEST_GET_REQUEST_PERMISSION = 2;
 
-		async void BuildFitnessClient (Activity activity)
+		void BuildFitnessClient (Activity activity)
 		{
 			var clientConnectionCallback = new ClientConnectionCallback ();
 			clientConnectionCallback.OnConnectedImpl = () => {
-				/*DataSet dataSet = InsertFitnessData ();
-
-				Log.Info (TAG, "Inserting the dataset in the History API");
-				var insertStatus = (Statuses)FitnessClass.HistoryApi.InsertData (mClient, dataSet).Await (1, TimeUnit.Minutes);
-
-				if (!insertStatus.IsSuccess) {
-					Log.Info (TAG, "There was a problem inserting the dataset.");
-					return;
-				}
-
-				Log.Info (TAG, "Data insert was successful!");
-
-				DataReadRequest readRequest = QueryFitnessData ();
-
-				var dataReadResult = await FitnessClass.HistoryApi.ReadDataAsync (mClient, readRequest);
-
-				PrintData (dataReadResult);*/
-
 				RefreshHealthStateData();
 			};
 
@@ -396,6 +313,16 @@ namespace GoogleFitSample
 			Log.Info (TAG, "Data insert was successful!");
 
 			RefreshHealthStateData ();
+		}
+
+		public void RemoveFoodEntry (FoodEntry entry)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public void AddFoodEntry (FoodEntry entry)
+		{
+			throw new NotImplementedException ();
 		}
 
 		#endregion

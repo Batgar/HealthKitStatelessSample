@@ -54,6 +54,7 @@ namespace HealthKitSample
 			HKQuantityTypeIdentifierKey.Height,
 			HKQuantityTypeIdentifierKey.BodyMass,
 			HKQuantityTypeIdentifierKey.StepCount,
+			HKQuantityTypeIdentifierKey.DietaryPotassium,
 		};
 
 		static NSString[] CharacteristicTypesToRead = new NSString[] {
@@ -205,6 +206,24 @@ namespace HealthKitSample
 			}
 		}
 
+		void RefreshFoodCorrelations()
+		{
+			var correlationType = HKCorrelationType.GetCorrelationType (HKCorrelationTypeKey.IdentifierFood);
+
+			HKCorrelationQuery query = new HKCorrelationQuery (correlationType, null, null, new HKCorrelationQueryResultHandler((resultQuery, correlations, error) => {
+				List<HealthKitFoodEntry> foodEntries = new List<HealthKitFoodEntry>();
+
+				foreach (var correlation in correlations)
+				{
+					foodEntries.Add(new HealthKitFoodEntry(correlation));
+				}
+			}));
+
+			HealthStore.ExecuteQuery (query);
+		}
+
+
+
 		void RefreshQuantityValue(NSString quantityTypeKey)
 		{			
 			var quantityType = HKObjectType.GetQuantityType (quantityTypeKey);
@@ -212,13 +231,13 @@ namespace HealthKitSample
 			NSSortDescriptor timeSortDescriptor = new NSSortDescriptor(HKSample.SortIdentifierEndDate, false);
 
 			// Since we are interested in retrieving the user's latest sample, we sort the samples in descending order, and set the limit to 1. We are not filtering the data, and so the predicate is set to nil.
-			HKSampleQuery query = new HKSampleQuery(quantityType, null, 100,  new NSSortDescriptor[]{timeSortDescriptor}, 
-				new HKSampleQueryResultsHandler((query2, results, error) =>
+			HKSampleQuery query = new HKSampleQuery(quantityType, null, HKSampleQuery.NoLimit,  new NSSortDescriptor[]{timeSortDescriptor}, 
+				new HKSampleQueryResultsHandler((resultQuery, results, error) =>
 				{
 					Action<HKSampleQuery, HKSample[], NSError> handler = null;
 					if (results!= null && results.Length > 0 && _sampleQueryHandlers.TryGetValue(quantityTypeKey, out handler))
 					{
-						handler(query2, results, error);
+						handler(resultQuery, results, error);
 					}
 					
 				}));
@@ -280,6 +299,55 @@ namespace HealthKitSample
 				
 		}
 
+		public void AddFoodEntry(FoodEntry foodEntry)
+		{
+			var date = new NSDate ();
+			var correlationType = HKCorrelationType.GetCorrelationType (HKCorrelationTypeKey.IdentifierFood);
+			var mg = HKUnit.FromString ("mg");
+			var quantity = HKQuantity.FromQuantity (mg, foodEntry.Potassium);
+
+			var quantityType = HKQuantityType.GetQuantityType (HKQuantityTypeIdentifierKey.DietaryPotassium);
+
+			var sample = HKQuantitySample.FromType (quantityType, quantity, date, date);
+
+			var metadata = new HKMetadata (new NSDictionary (foodEntry.FoodName, HKMetadataKey.FoodType));
+
+			var correlation = HKCorrelation.Create(correlationType, NSDate.Now, NSDate.Now, new NSSet(new object[]{
+				sample //Add more samples to the correlation for food as they are added to the FoodEntry class.
+			}), metadata);
+
+			HealthStore.SaveObject(correlation, (success, error) => {
+				if (!success || error != null)
+				{
+					//There may have been an add error for some reason.
+					AlertManager.ShowError("Health Kit", "Unable to save food: " + error);
+				}
+				else
+				{
+					//Refresh all app wide food data.
+					RefreshFoodCorrelations();
+				}
+			});
+		}
+
+	
+		public void RemoveFoodEntry (FoodEntry entry)
+		{
+			//Cast the entry as a HealthKitFoodEntry...
+			HealthKitFoodEntry hkEntry = entry as HealthKitFoodEntry;
+			HealthStore.DeleteObject (hkEntry.FoodCorrelation, (success, error) => {
+				if (!success || error != null)
+				{
+					//NOTE: If this app didn't put the entry into the blood glucose list, then there will be an error on delete.
+					AlertManager.ShowError("Health Kit", "Unable to delete food: " + error);
+				}
+				else
+				{
+					RefreshFoodCorrelations();
+				}
+			});
+		}
+
 
 
 		private static string GetDisplayableBiologicalSex(HKBiologicalSex biologicalSex)
@@ -306,6 +374,8 @@ namespace HealthKitSample
 			foreach (var characteristicTypeToRead in CharacteristicTypesToRead) {
 				RefreshCharacteristicValue (characteristicTypeToRead);
 			}
+
+			RefreshFoodCorrelations ();
 		}
 
 
