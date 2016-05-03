@@ -264,7 +264,7 @@ namespace HealthKitSample
 		{			
 			//Cast the entry as a HealthKitBloodGlucoseEntry...
 			HealthKitBloodGlucoseEntry hkBloodGlucoseEntry = entry as HealthKitBloodGlucoseEntry;
-			HealthStore.DeleteObject (hkBloodGlucoseEntry.BloodGlucoseSample, new Action<bool, NSError> ((success, error) => {
+			HealthStore.DeleteObject (hkBloodGlucoseEntry.BloodGlucoseSample, (success, error) => {
 				if (!success || error != null)
 				{
 					//NOTE: If this app didn't put the entry into the blood glucose list, then there will be an error on delete.
@@ -275,7 +275,7 @@ namespace HealthKitSample
 					//Woo! We properly removed the last entry, make sure that any listeners to the glucose states are properly updated.
 					RefreshQuantityValue(HKQuantityTypeIdentifierKey.BloodGlucose);
 				}
-			}));
+			});
 		}
 
 		/// <summary>
