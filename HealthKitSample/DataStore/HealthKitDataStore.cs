@@ -213,7 +213,7 @@ namespace HealthKitSample
 
 			// Since we are interested in retrieving the user's latest sample, we sort the samples in descending order, and set the limit to 1. We are not filtering the data, and so the predicate is set to nil.
 			HKSampleQuery query = new HKSampleQuery(quantityType, null, 100,  new NSSortDescriptor[]{timeSortDescriptor}, 
-				new HKSampleQueryResultsHandler(new Action<HKSampleQuery,HKSample[],NSError>((query2, results, error) =>
+				new HKSampleQueryResultsHandler((query2, results, error) =>
 				{
 					Action<HKSampleQuery, HKSample[], NSError> handler = null;
 					if (results!= null && results.Length > 0 && _sampleQueryHandlers.TryGetValue(quantityTypeKey, out handler))
@@ -221,7 +221,7 @@ namespace HealthKitSample
 						handler(query2, results, error);
 					}
 					
-				})));
+				}));
 			
 			HealthStore.ExecuteQuery (query);
 		}
@@ -265,7 +265,7 @@ namespace HealthKitSample
 			var quantity = HKQuantity.FromQuantity (mgPerDL, entry.BloodGlucoseValue);
 			var sample = HKQuantitySample.FromType (quantityType, quantity, date, date);
 
-			HealthStore.SaveObject(sample, new Action<bool, NSError>((success, error) => {
+			HealthStore.SaveObject(sample, (success, error) => {
 				if (!success || error != null)
 				{
 					//There may have been an add error for some reason.
@@ -276,7 +276,7 @@ namespace HealthKitSample
 					//Refresh all app wide blood glucose UI fields.
 					RefreshQuantityValue(HKQuantityTypeIdentifierKey.BloodGlucose);
 				}
-			}));
+			});
 				
 		}
 
@@ -298,14 +298,12 @@ namespace HealthKitSample
 
 
 		public void Refresh()
-		{
-			var quantityTypesToRead = QuantityTypesToRead.Select (q=> new {Key = q, QuantityType = HKObjectType.GetQuantityType (q)});
-				
-			foreach (var quantityTypeToRead in quantityTypesToRead) {
-				RefreshQuantityValue (quantityTypeToRead.Key);
+		{			
+			foreach (var quantityTypeToRead in QuantityTypesToRead) {
+				RefreshQuantityValue (quantityTypeToRead);
 			}
 
-			foreach (var characteristicTypeToRead in CharacteristicTypesToRead.Select(c => c)) {
+			foreach (var characteristicTypeToRead in CharacteristicTypesToRead) {
 				RefreshCharacteristicValue (characteristicTypeToRead);
 			}
 		}
@@ -316,7 +314,7 @@ namespace HealthKitSample
 		{
 			//Cast the entry as a HealthKitBloodGlucoseEntry...
 			HealthKitStepCountEntry hkStepCountEntry = entry as HealthKitStepCountEntry;
-			HealthStore.DeleteObject (hkStepCountEntry.StepCountSample, new Action<bool, NSError> ((success, error) => {
+			HealthStore.DeleteObject (hkStepCountEntry.StepCountSample, (success, error) => {
 				if (!success || error != null)
 				{
 					//NOTE: If this app didn't put the entry into the blood glucose list, then there will be an error on delete.
@@ -327,7 +325,7 @@ namespace HealthKitSample
 					//Woo! We properly removed the last entry, make sure that any listeners to the glucose states are properly updated.
 					RefreshQuantityValue(HKQuantityTypeIdentifierKey.StepCount);
 				}
-			}));
+			});
 		}
 
 		public void AddStepCountEntry (StepCountEntry entry)
@@ -338,7 +336,7 @@ namespace HealthKitSample
 			var quantity = HKQuantity.FromQuantity (countUnit, entry.Count);
 			var sample = HKQuantitySample.FromType (quantityType, quantity, date, date);
 
-			HealthStore.SaveObject(sample, new Action<bool, NSError>((success, error) => {
+			HealthStore.SaveObject(sample, (success, error) => {
 				if (!success || error != null)
 				{
 					//There may have been an add error for some reason.
@@ -349,7 +347,7 @@ namespace HealthKitSample
 					//Refresh all app wide blood glucose UI fields.
 					RefreshQuantityValue(HKQuantityTypeIdentifierKey.StepCount);
 				}
-			}));
+			});
 		}
 	}
 }
