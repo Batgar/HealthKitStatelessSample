@@ -107,7 +107,7 @@ namespace GoogleFitSample
 			var readRequest = new DataReadRequest.Builder ()
 				.Read (Android.Gms.Fitness.Data.DataType.TypeNutrition)
 				.SetTimeRange(startTimeElapsed, endTimeElapsed, TimeUnit.Milliseconds)
-				.SetLimit(1)
+				.SetLimit(100)
 				.Build ();
 
 			var readResult = await FitnessClass.HistoryApi.ReadDataAsync (mClient, readRequest);
